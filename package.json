@@ -1,7 +1,11 @@
 {
   "name": "react-timecalendar",
   "version": "0.1.0",
-  "description":"Lightweight React calendar with time options for booking",
+  "description": "Lightweight React calendar with time options for booking",
+  "main": "./src/TimeCalendar.jsx",
+  "homepage": "https://jacobsidford.github.io/react-timecalendar/",
+  "license": "MIT",
+  "repository": "https://github.com/jacobsidford/react-timecalendar/",
   "dependencies": {
     "date-fns": "^1.30.1",
     "react": "^16.8.3",
@@ -10,6 +14,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -23,5 +29,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
+  }
 }
