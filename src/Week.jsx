@@ -26,7 +26,7 @@ export default class Weeks extends React.Component {
         if (dateFns.isToday(day)) {
           className += ' today';
         }
-        if (dateFns.isSameMonth(day)) {
+        if (!dateFns.isSameMonth(day, currentMonth)) {
           className += ' disabled';
         }
         if (dateFns.isSameDay(day, selectedDate)) {
