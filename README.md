@@ -1,7 +1,5 @@
 
 # React Time Calendar
-> Additional information or tagline
-
 Lightweight and customizable date/time picker for react.js
 ## Try it out
 ```
@@ -20,17 +18,17 @@ Online version available at https://jacobsidford.github.io/react-timecalendar/
 Which will produce a local copy at http://localhost:3000/
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 
-## Features
+<!-- ## Features
 
 What's all the bells and whistles this project can perform?
 * What's the main functionality
 * You can also do another thing
-* If you get really randy, you can even do this
+* If you get really randy, you can even do this -->
 
 ## Dependencies
 [react](https://github.com/facebook/react)
 [date-fns](https://github.com/date-fns/date-fns)
-## Usage
+<!-- ## Usage
 
 Here you should write what are all of the configurations a user can enter when
 using the project.
@@ -51,7 +49,7 @@ awesome-project "Some other value"  # Prints "You're nailing this readme!"
 Type: `Number|Boolean`  
 Default: 100
 
-Copy-paste as many of these as you need.
+Copy-paste as many of these as you need. -->
 
 ## Style guide
 Following Airbnb's [styling guide](https://github.com/airbnb/javascript/tree/master/react)
