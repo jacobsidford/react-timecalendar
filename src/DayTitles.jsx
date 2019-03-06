@@ -4,7 +4,7 @@ import dateFns from "date-fns";
 
 export default class DayTitles extends React.Component {
   render() {
-    const dateFormat = "dddd";
+    const dateFormat = window.innerWidth > 767 ? "dddd" : "ddd";
     const days = [];
     let startDate = dateFns.startOfWeek(this.props.currentMonth);
     for (let i = 0; i < 7; i++) {

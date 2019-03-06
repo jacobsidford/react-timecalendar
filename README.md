@@ -1,6 +1,7 @@
 
 # React Time Calendar
 Lightweight and customizable date/time picker for react.js
+![Date selection calendar](./public/images/screen1.png?raw=true "Screenshot of calendar")
 ## Try it out
 ```
 $ git clone https://github.com/jacobsidford/react-timecalendar.git
@@ -8,14 +9,14 @@ $ cd react-TimeCalendar
 $ npm install
 $ npm start
 ```
-Server will start on `http://localhost:3000/`
+Server will start on 'http://localhost:3000/' \s
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 
 ## Installing / Getting started
 
 `npm install --save react-timecalendar`
 
-Which will produce a local copy at http://localhost:3000/
+Which will produce a local copy at http://localhost:3000/ \s
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 
 <!-- ## Features
@@ -26,7 +27,7 @@ What's all the bells and whistles this project can perform?
 * If you get really randy, you can even do this -->
 
 ## Dependencies
-[react](https://github.com/facebook/react)
+[react](https://github.com/facebook/react) \s
 [date-fns](https://github.com/date-fns/date-fns)
 <!-- ## Usage
 
