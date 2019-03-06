@@ -4,6 +4,7 @@ import dateFns from "date-fns";
 import Header from './Header';
 import DayTitles from './DayTitles';
 import Weeks from './Week';
+import TimeSelect from './TimeSelect';
 import "./App.css";
 
 export default class TimeCalendar extends React.Component {
@@ -52,6 +53,7 @@ export default class TimeCalendar extends React.Component {
       onDateClick={this.onDateClick}
       clickable={this.props.clickable}
       />
+      {this.props.timeSelect ? <TimeSelect /> : ""}
       </div>
     );
   }

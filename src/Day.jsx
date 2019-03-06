@@ -11,7 +11,7 @@ const Day = props => (
 Day.propTypes = {
   className: PropTypes.string,
   onDateClick: PropTypes.func,
-  date: PropTypes.number,
+  date: PropTypes.string,
 };
 
 Day.defaultProps = {
