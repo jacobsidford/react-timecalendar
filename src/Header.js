@@ -24,7 +24,7 @@ Header.propTypes = {
 };
 
 Header.defaultProps = {
-  currentMonth: 'March 2019',
+  currentMonth: new Date(),
   prevMonth: null,
   nextMonth: null,
 };

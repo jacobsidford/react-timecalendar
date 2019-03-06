@@ -23,18 +23,10 @@ export default class Weeks extends React.Component {
       for (let i = 0; i < 7; i++) {
 
         let className = '';
-        if (dateFns.isToday(day)) {
-          className += ' today';
-        }
-        if (!dateFns.isSameMonth(day, currentMonth)) {
-          className += ' disabled';
-        }
-        if (dateFns.isSameDay(day, selectedDate)) {
-          className += ' selected';
-        }
-        if (!this.props.clickable) {
-          className += ' not-clickable';
-        }
+        className += dateFns.isToday(day) ? ' today' : ''
+        className += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
+        className += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''
+        className += this.props.clickable ? '' : ' not-clickable'
 
         formattedDate = dateFns.format(day, dateFormat);
         const cloneDay = day;
