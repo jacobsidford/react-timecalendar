@@ -9,14 +9,16 @@ $ cd react-TimeCalendar
 $ npm install
 $ npm start
 ```
-Server will start on 'http://localhost:3000/' \s
+Server will start on 'http://localhost:3000/'
+
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 
 ## Installing / Getting started
 
 `npm install --save react-timecalendar`
 
-Which will produce a local copy at http://localhost:3000/ \s
+Which will produce a local copy at http://localhost:3000/
+
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 
 <!-- ## Features
@@ -27,7 +29,8 @@ What's all the bells and whistles this project can perform?
 * If you get really randy, you can even do this -->
 
 ## Dependencies
-[react](https://github.com/facebook/react) \s
+[react](https://github.com/facebook/react)
+
 [date-fns](https://github.com/date-fns/date-fns)
 <!-- ## Usage
 

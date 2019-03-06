@@ -15,10 +15,10 @@ export default class TimeCalendar extends React.Component {
   };
 
   onDateClick = day => {
-    console.log(day);
     this.setState({
       selectedDate: day
     });
+    if (this.props.functionPassed)this.props.functionPassed(day);
   };
 
   nextMonth = () => {
@@ -53,7 +53,7 @@ export default class TimeCalendar extends React.Component {
       onDateClick={this.onDateClick}
       clickable={this.props.clickable}
       />
-      {this.props.timeSelect ? <TimeSelect /> : ""}
+      {this.props.timeSlot ? <TimeSelect /> : ""}
       </div>
     );
   }
@@ -61,12 +61,12 @@ export default class TimeCalendar extends React.Component {
 
 TimeCalendar.propTypes = {
   disableHistory: PropTypes.bool,
-  timeSelect: PropTypes.bool,
+  timeSlot: PropTypes.number,
   clickable: PropTypes.bool,
 };
 
 TimeCalendar.defaultProps = {
   disableHistory: true,
-  timeSelect: false,
+  timeSlot: 30,
   clickable: true,
 };
