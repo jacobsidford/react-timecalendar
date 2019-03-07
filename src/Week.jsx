@@ -26,15 +26,14 @@ export default class Weeks extends React.Component {
         className += dateFns.isToday(day) ? ' today' : ''
         className += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
         className += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''
-        className += this.props.clickable ? '' : ' not-clickable'
+        className += this.props.clickable ? '' : ' disabled'
 
-        formattedDate = dateFns.format(day, dateFormat);
         const cloneDay = day;
         days.push(
           <Day
           className={className}
           key={day}
-          date={formattedDate}
+          date={dateFns.format(day, dateFormat)}
           onDateClick={() => this.props.onDateClick(cloneDay)}
           >
           </Day>

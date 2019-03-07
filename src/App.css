@@ -243,8 +243,8 @@
   text-align: center;
   font-weight: 700;
   flex-grow: 0;
-  flex-basis: calc(100%/5);
-  width: calc(100%/5);
+  flex-basis: calc(100%/4);
+  width: calc(100%/4);
 }
 .calendar .timeSelector .optionHolder .col:hover {
 background: var(--bg-color);
@@ -268,8 +268,9 @@ transition: 0.5s ease-out;
   margin-top: 0px;
   transition: all 375ms ease-in-out;
 }
+/* Planning to animate .active height for smooth dropdown */
 .calendar .timeSelector .active {
-height:150px;
+height:auto;
 }
 .calendar .timeSelector .inactive {
 height:0px;

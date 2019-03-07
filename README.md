@@ -9,7 +9,7 @@ $ cd react-TimeCalendar
 $ npm install
 $ npm start
 ```
-Server will start on 'http://localhost:3000/'
+Server will start on http://localhost:3000/
 
 Online version available at https://jacobsidford.github.io/react-timecalendar/
 

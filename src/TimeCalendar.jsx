@@ -37,7 +37,6 @@ export default class TimeCalendar extends React.Component {
       currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
     });
   };
-
   render() {
     return (
       <div className="calendar">
@@ -53,7 +52,14 @@ export default class TimeCalendar extends React.Component {
       onDateClick={this.onDateClick}
       clickable={this.props.clickable}
       />
-      {this.props.timeSlot ? <TimeSelect /> : ""}
+      {this.props.timeSlot && this.props.clickable ?
+        <TimeSelect
+        selectedDate={this.state.selectedDate}
+        timeSlot={this.props.timeSlot}
+        openHours={this.props.openHours}
+        onTimeClick={this.props.onTimeClick}
+        bookings={this.props.bookings}
+        /> : ""}
       </div>
     );
   }
