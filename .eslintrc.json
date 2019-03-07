@@ -12,7 +12,7 @@
         "ecmaVersion": 2018
     },
     "plugins": [
-        "vue"
+        "react"
     ],
     "rules": {
     }

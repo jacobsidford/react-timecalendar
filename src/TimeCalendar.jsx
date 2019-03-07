@@ -1,34 +1,58 @@
-import React from "react";
+import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
-import dateFns from "date-fns";
+import dateFns from 'date-fns';
 import Header from './Header';
 import DayTitles from './DayTitles';
-import Weeks from './Week';
+import Weeks from './Weeks';
 import TimeSelect from './TimeSelect';
-import "./App.css";
+import './App.css';
 
-export default class TimeCalendar extends React.Component {
-  state = {
-    currentMonth: new Date(),
-    selectedDate: new Date(),
-    disableHistory: this.props.disableHistory,
-  };
+const propTypes = {
+  openHours: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
+  booking: PropTypes.arrayOf(PropTypes.string),
+  disableHistory: PropTypes.bool,
+  clickable: PropTypes.bool,
+  timeSlot: PropTypes.number,
+  onDateFunction: PropTypes.func,
+  onTimeClick: PropTypes.func,
+};
 
-  onDateClick = day => {
+const defaultProps = {
+  bookings:["07-03-19', '02-04-19"],
+  disableHistory: true,
+  clickable: true,
+  timeSlot: 30,
+  onDateFunction: null,
+  onTimeClick: null
+};
+
+export default class TimeCalendar extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentMonth: new Date(),
+      selectedDate: new Date(),
+    };
+    this.onDateClick = this.onDateClick.bind(this);
+    this.nextMonth = this.nextMonth.bind(this);
+    this.prevMonth = this.prevMonth.bind(this);
+  }
+
+  onDateClick(day) {
     this.setState({
       selectedDate: day
     });
-    if (this.props.functionPassed)this.props.functionPassed(day);
+    if (this.props.onDateFunction)this.props.onDateFunction(day);
   };
 
-  nextMonth = () => {
+  nextMonth() {
     this.setState({
       currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
     });
   };
 
-  prevMonth = () => {
-    if (this.state.disableHistory) {
+  prevMonth() {
+    if (this.props.disableHistory) {
       if (dateFns.isPast(this.state.currentMonth)){
         return
       }
@@ -41,9 +65,9 @@ export default class TimeCalendar extends React.Component {
     return (
       <div className="calendar">
       <Header
+      currentMonth={dateFns.format(this.state.currentMonth, "MMMM YYYY")}
       nextMonth={this.nextMonth}
       prevMonth={this.prevMonth}
-      currentMonth={dateFns.format(this.state.currentMonth, "MMMM YYYY")}
       />
       <DayTitles currentMonth={this.state.currentMonth} />
       <Weeks
@@ -51,8 +75,9 @@ export default class TimeCalendar extends React.Component {
       selectedDate={this.state.selectedDate}
       onDateClick={this.onDateClick}
       clickable={this.props.clickable}
+      bookings={this.props.bookings}
       />
-      {this.props.timeSlot && this.props.clickable ?
+      {this.props.timeSlot && this.props.clickable && this.props.onTimeClick ?
         <TimeSelect
         selectedDate={this.state.selectedDate}
         timeSlot={this.props.timeSlot}
@@ -60,19 +85,10 @@ export default class TimeCalendar extends React.Component {
         onTimeClick={this.props.onTimeClick}
         bookings={this.props.bookings}
         /> : ""}
-      </div>
-    );
+        </div>
+      );
+    }
   }
-}
 
-TimeCalendar.propTypes = {
-  disableHistory: PropTypes.bool,
-  timeSlot: PropTypes.number,
-  clickable: PropTypes.bool,
-};
-
-TimeCalendar.defaultProps = {
-  disableHistory: true,
-  timeSlot: 30,
-  clickable: true,
-};
+  TimeCalendar.propTypes = propTypes;
+  TimeCalendar.defaultProps = defaultProps;

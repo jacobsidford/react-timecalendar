@@ -1,23 +1,28 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
-const Day = props => (
-  <div className={`col cell${props.className}`} onClick={props.onDateClick}>
-  <span className="number">{props.date}</span>
-  <span className="bg">{props.date}</span>
-  </div>
-);
-
-Day.propTypes = {
-  className: PropTypes.string,
-  onDateClick: PropTypes.func,
+const propTypes = {
+  classSet: PropTypes.string,
   date: PropTypes.string,
+  onDateClick: PropTypes.func,
 };
 
-Day.defaultProps = {
-  className: '',
+const defaultProps = {
+  classSet: "",
   date: 1,
   onDateClick: null,
 };
+
+function Day(props) {
+  return(
+    <div className={'col cell' + props.classSet} onClick={props.onDateClick}>
+    <span className="number">{props.date}</span>
+    <span className="bg">{props.date}</span>
+    </div>
+  );
+}
+
+Day.propTypes = propTypes;
+Day.defaultProps = defaultProps;
 
 export default Day;

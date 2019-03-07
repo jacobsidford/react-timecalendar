@@ -2,6 +2,14 @@ import React from "react";
 import PropTypes from 'prop-types';
 import dateFns from "date-fns";
 
+const propTypes = {
+  currentMonth: PropTypes.instanceOf(Date)
+};
+
+const defaultProps = {
+  currentMonth: null,
+};
+
 export default class DayTitles extends React.Component {
   render() {
     const dateFormat = window.innerWidth > 767 ? "dddd" : "ddd";
@@ -18,10 +26,5 @@ export default class DayTitles extends React.Component {
   }
 }
 
-DayTitles.propTypes = {
-  currentMonth: PropTypes.instanceOf(dateFns),
-};
-
-DayTitles.defaultProps = {
-  currentMonth: null,
-};
+DayTitles.propTypes = propTypes;
+DayTitles.defaultProps = defaultProps;
