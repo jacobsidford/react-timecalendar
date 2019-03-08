@@ -50,7 +50,7 @@ const MyCalendar = () => (
 | `disableHistory` | bool        | `true`  | Disable navigating before current month.               |
 | `clickable`      | bool        | `true`  | Make days clickable.                                   |
 | `timeSlot`       | number      | 30      | Amount of time needed for each booking.                |
-| `onDateFunction' | function    | null    | Function called on click of calendar day.              |
+| `onDateFunction` | function    | null    | Function called on click of calendar day.              |
 | `onTimeFunction` | function    | null    | Function called on click of time slot.                 |
 | `bookings`       | array       | '[]'    | TODO :Days/times that will be rendered unavailable     |
 
@@ -89,9 +89,9 @@ CSS class taxonomy:
 
 ```
 ####TODO:
-- [] Take in bookings data and disable relative days/timeslots.
-- [] Allow multiple timeSlot selection
-- [] Multiple day selection if not using time picker  
+- [ ] Take in bookings data and disable relative days/timeslots.
+- [ ] Allow multiple timeSlot selection
+- [ ] Multiple day selection if not using time picker  
 
 ## Dependencies
 [react](https://github.com/facebook/react)
