@@ -3,7 +3,7 @@
 Lightweight and customizable date/time picker for react.js
 ![Date selection calendar](./public/images/screen1.png?raw=true "Screenshot of calendar")
 ## Try it out
-```
+```bash
 $ git clone https://github.com/jacobsidford/react-timecalendar.git
 $ cd react-TimeCalendar
 $ npm install
@@ -15,18 +15,83 @@ Online version available at https://jacobsidford.github.io/react-timecalendar/
 
 ## Installing / Getting started
 
-`npm install --save react-timecalendar`
+```bash
+npm install --save react-timecalendar
+```
 
-Which will produce a local copy at http://localhost:3000/
+## Usage
 
-Online version available at https://jacobsidford.github.io/react-timecalendar/
+```js
+import React from 'react';
+import TimeCalendar from 'react-timecalendar';
 
-<!-- ## Features
+const openHours = [
+  [9.5, 15],
+  [9, 23.5]
+];
+function loggingTime(time) {
+  console.log(time);
+}
+const MyCalendar = () => (
+  <TimeCalendar
+  disableHistory
+  clickable
+  timeSlot = {30}
+  openHours = {openHours}
+  onTimeClick = {loggingTime}
+  />
+);
+```
+## Options
 
-What's all the bells and whistles this project can perform?
-* What's the main functionality
-* You can also do another thing
-* If you get really randy, you can even do this -->
+| Prop             | Type        | Default | Description                                            |
+| :--------------- | :---------- | :------ | :----------------------------------------------------- |
+| `openHours`      | array       | `[][]`  | Times slots that will be rendered available.           |
+| `disableHistory` | bool        | `true`  | Disable navigating before current month.               |
+| `clickable`      | bool        | `true`  | Make days clickable.                                   |
+| `timeSlot`       | number      | 30      | Amount of time needed for each booking.                |
+| `onDateFunction' | function    | null    | Function called on click of calendar day.              |
+| `onTimeFunction` | function    | null    | Function called on click of time slot.                 |
+| `bookings`       | array       | '[]'    | TODO :Days/times that will be rendered unavailable     |
+
+To activate time selection, timeSlot and onTimeClick must be provided with clickable being true.
+## Styling
+
+CSS class taxonomy:
+
+```sass
+.calendar{
+   .days
+   .header{
+        .icon
+    }
+  .body{
+    .row{
+      .col
+      .selected
+      .disabled
+      .cell{
+        .number
+        .bg
+        }
+    }
+  .timeSelector{
+        p
+        .active
+        .inactive
+        .optionSpacer
+        .optionHolder{
+          p
+          .col
+        }
+   }
+}
+
+```
+####TODO:
+- [] Take in bookings data and disable relative days/timeslots.
+- [] Allow multiple timeSlot selection
+- [] Multiple day selection if not using time picker  
 
 ## Dependencies
 [react](https://github.com/facebook/react)
