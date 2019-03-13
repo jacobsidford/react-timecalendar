@@ -35,6 +35,7 @@ export default class Weeks extends PureComponent {
       for (let i = 0; i < 7; i++) {
 
         let classSet = '';
+        classSet += ' ' + dateFns.format(day, 'ddd');
         classSet += dateFns.isToday(day) ? ' today' : ''
         classSet += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
         classSet += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''

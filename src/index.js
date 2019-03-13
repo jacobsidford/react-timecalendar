@@ -13,7 +13,12 @@ function loggingTime(time) {
 const divStyle = window.innerWidth > 1023 ? {width:'40%'} : {width:'100%'};
 const openHours = [
   [9.5, 15],
-  [9, 23.5]
+  [9, 23.5],
+  [8, 16],
+  [8.5, 18],
+  [10, 10],
+  [0, 0],
+  [9, 17]
 ];
 // let bookings = [
 //  'Thu Mar 07 2019 14:30:00 GMT+1100 (Australian Eastern Daylight Time)'

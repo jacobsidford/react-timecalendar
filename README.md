@@ -54,6 +54,27 @@ const MyCalendar = () => (
 | `onTimeFunction` | function    | null    | Function called on click of time slot.                 |
 | `bookings`       | array       | '[]'    | TODO :Days/times that will be rendered unavailable     |
 
+Opening hours can be of varying 24 hour value array lengths, with `[i][0]` being open time and `[i][1]` being closing.
+```js
+const openHours = [
+  [9.5, 15]
+];
+// Single array means all days open and close at this time.
+const openHours = [
+  [9.5, 15],
+  [9, 23.5]
+];
+// Double array indicates weekday and weekend hours separately.
+const openHours = [
+  [9.5, 15],
+  [9, 23.5],
+  [8, 16],
+  [8.5, 18],
+  [10, 10],
+  [0, 0],
+  [9, 17]
+];
+//7 array's to indicate each day of the week, to not offer timeSlots on that day.
 To activate time selection, timeSlot and onTimeClick must be provided with clickable being true.
 ## Styling
 
@@ -70,6 +91,13 @@ CSS class taxonomy:
       .col
       .selected
       .disabled
+      .sun
+      .mon
+      .tue
+      .wed
+      .thu
+      .fri
+      .sat
       .cell{
         .number
         .bg

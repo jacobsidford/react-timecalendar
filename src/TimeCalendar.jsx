@@ -5,7 +5,7 @@ import Header from './Header';
 import DayTitles from './DayTitles';
 import Weeks from './Weeks';
 import TimeSelect from './TimeSelect';
-import './App.css';
+import './App.scss';
 
 const propTypes = {
   openHours: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
@@ -84,7 +84,7 @@ export default class TimeCalendar extends PureComponent {
         openHours={this.props.openHours}
         onTimeClick={this.props.onTimeClick}
         bookings={this.props.bookings}
-        /> : ""}
+        /> : "g"}
         </div>
       );
     }
