@@ -15,9 +15,18 @@ const defaultProps = {
 
 function Day(props) {
   return(
-    <div className={'col cell' + props.classSet} onClick={props.onDateClick}>
-    <span className="number">{props.date}</span>
-    <span className="bg">{props.date}</span>
+    <div
+      className={'col cell' + props.classSet}
+      onClick={props.onDateClick}>
+
+      <span className="number">
+        {props.date}
+      </span>
+
+      <span className="bg">
+        {props.date}
+      </span>
+
     </div>
   );
 }

@@ -4,7 +4,7 @@ import dateFns from "date-fns";
 import TimeSlot from './TimeSlot';
 
 const propTypes = {
- selectedDate: PropTypes.instanceOf(Date),
+  selectedDate: PropTypes.instanceOf(Date),
   timeSlot: PropTypes.number,
   openHours: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
   onTimeClick: PropTypes.func,
@@ -20,10 +20,10 @@ const defaultProps = {
 
 export default class TimeSelect extends PureComponent {
   constructor(props) {
-   super(props);
-   this.state = {selectorClass: 'inactive'};
-   this.selectorClick = this.selectorClick.bind(this);
- }
+    super(props);
+    this.state = {selectorClass: 'inactive'};
+    this.selectorClick = this.selectorClick.bind(this);
+  }
 
   selectorClick() {
     this.setState({
@@ -72,18 +72,18 @@ export default class TimeSelect extends PureComponent {
         timeSlots.push(
 
           <TimeSlot
-          key = {cloneTime}
-          time = {dateFns.format(cloneTime, dateFormat)}
-          classSet = {classSet}
-          onTimeClick = {() => this.props.onTimeClick(cloneTime)}
-          >
+            key = {cloneTime}
+            time = {dateFns.format(cloneTime, dateFormat)}
+            classSet = {classSet}
+            onTimeClick = {() => this.props.onTimeClick(cloneTime)}
+            >
           </TimeSlot>
         );
         timePick = dateFns.addMinutes(timePick, 30);
       }
       rows.push(
         <div className="row" key={timePick}>
-        {timeSlots}
+          {timeSlots}
         </div>
       );
       timeSlots = [];
@@ -91,12 +91,12 @@ export default class TimeSelect extends PureComponent {
 
     return (
       <div className={'timeSelector'}>
-      <p onClick={this.selectorClick}>Make a booking</p>
-      <div className={"optionSpacer body"}>
-      <div className={"optionHolder " + this.state.selectorClass}>
-      {rows}
-      </div>
-      </div>
+        <p onClick={this.selectorClick}>Make a booking</p>
+        <div className={"optionSpacer body"}>
+          <div className={"optionHolder " + this.state.selectorClass}>
+            {rows}
+          </div>
+        </div>
       </div>
     );
   }

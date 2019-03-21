@@ -10,6 +10,31 @@ function loggingTime(time) {
   console.log(time);
   console.log(dateFns.format(time, "YY-MM-DD-mm"))
 }
+// Convert to class and test below
+// handleTimeClick(time) {
+//   if(this.state.startTime == ''){
+//     this.setState({
+//       startTime: time
+//     });
+//   }
+//   else if (!dateFns.isSameDay(this.state.startTime, time)){
+//     this.setState({
+//       startTime: '',
+//       endTime: ''
+//     });
+//   }
+//   else if (time<this.state.startTime) {
+//     this.setState({
+//       startTime: '',
+//       endTime: ''
+//     });
+//   }
+//   else{
+//     this.setState({
+//       endTime: time
+//     });
+//   }
+// };
 const divStyle = window.innerWidth > 1023 ? {width:'40%'} : {width:'100%'};
 const openHours = [
   [9.5, 15],

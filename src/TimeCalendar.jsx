@@ -64,31 +64,31 @@ export default class TimeCalendar extends PureComponent {
   render() {
     return (
       <div className="calendar">
-      <Header
-      currentMonth={dateFns.format(this.state.currentMonth, "MMMM YYYY")}
-      nextMonth={this.nextMonth}
-      prevMonth={this.prevMonth}
-      />
-      <DayTitles currentMonth={this.state.currentMonth} />
-      <Weeks
-      currentMonth={this.state.currentMonth}
-      selectedDate={this.state.selectedDate}
-      onDateClick={this.onDateClick}
-      clickable={this.props.clickable}
-      bookings={this.props.bookings}
-      />
-      {this.props.timeSlot && this.props.clickable && this.props.onTimeClick ?
-        <TimeSelect
-        selectedDate={this.state.selectedDate}
-        timeSlot={this.props.timeSlot}
-        openHours={this.props.openHours}
-        onTimeClick={this.props.onTimeClick}
-        bookings={this.props.bookings}
-        /> : "g"}
-        </div>
-      );
+        <Header
+          currentMonth={dateFns.format(this.state.currentMonth, "MMMM YYYY")}
+          nextMonth={this.nextMonth}
+          prevMonth={this.prevMonth}
+          />
+        <DayTitles currentMonth={this.state.currentMonth} />
+        <Weeks
+          currentMonth={this.state.currentMonth}
+          selectedDate={this.state.selectedDate}
+          onDateClick={this.onDateClick}
+          clickable={this.props.clickable}
+          bookings={this.props.bookings}
+          />
+        {this.props.timeSlot && this.props.clickable && this.props.onTimeClick ?
+          <TimeSelect
+            selectedDate={this.state.selectedDate}
+            timeSlot={this.props.timeSlot}
+            openHours={this.props.openHours}
+            onTimeClick={this.props.onTimeClick}
+            bookings={this.props.bookings}
+            /> : ""}
+          </div>
+        );
+      }
     }
-  }
 
-  TimeCalendar.propTypes = propTypes;
-  TimeCalendar.defaultProps = defaultProps;
+    TimeCalendar.propTypes = propTypes;
+    TimeCalendar.defaultProps = defaultProps;

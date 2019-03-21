@@ -75,6 +75,7 @@ const openHours = [
   [9, 17]
 ];
 //7 array's to indicate each day of the week, to not offer timeSlots on that day.
+```
 To activate time selection, timeSlot and onTimeClick must be provided with clickable being true.
 ## Styling
 
@@ -116,7 +117,7 @@ CSS class taxonomy:
 }
 
 ```
-####TODO:
+### TODO:
 - [ ] Take in bookings data and disable relative days/timeslots.
 - [ ] Allow multiple timeSlot selection
 - [ ] Multiple day selection if not using time picker  

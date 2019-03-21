@@ -15,8 +15,12 @@ const defaultProps = {
 
 function TimeSlot(props) {
   return(
-    <div className={'col cell' + props.classSet} onClick={props.onTimeClick}>
-    <p>{props.time}</p>
+    <div
+      className={'col cell' + props.classSet}
+      onClick={props.onTimeClick}>
+      <p>
+        {props.time}
+      </p>
     </div>
   );
 }

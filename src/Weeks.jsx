@@ -44,25 +44,25 @@ export default class Weeks extends PureComponent {
         const cloneDay = day;
         days.push(
           <Day
-          classSet={classSet}
-          key={day}
-          date={dateFns.format(day, dateFormat)}
-          onDateClick={() => this.props.onDateClick(cloneDay)}
-          >
+            classSet={classSet}
+            key={day}
+            date={dateFns.format(day, dateFormat)}
+            onDateClick={() => this.props.onDateClick(cloneDay)}
+            >
           </Day>
         );
         day = dateFns.addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day}>
-        {days}
+          {days}
         </div>
       );
       days = [];
     }
     return <div className="body">{rows}</div>;
+    }
   }
-}
 
-Weeks.propTypes = propTypes;
-Weeks.defaultProps = defaultProps;
+  Weeks.propTypes = propTypes;
+  Weeks.defaultProps = defaultProps;
