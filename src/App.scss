@@ -207,7 +207,12 @@
     }
     .optionHolder .col {
       p {
-        border-bottom: 0px;
+      position: absolute;
+      font-size: 82.5%;
+      line-height: 1;
+      top: .75em;
+      right: .75em;
+      font-weight: 700;
       }
       text-align: center;
       font-weight: 700;
@@ -245,11 +250,5 @@
     }
   }
 }
-
-/* GRID */
-
-/* Calendar */
-
-/* ///  Time Selector ///  */
 
 /* Planning to animate .active height for smooth dropdown */

@@ -8,7 +8,7 @@ const propTypes = {
   timeSlot: PropTypes.number,
   openHours: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
   onTimeClick: PropTypes.func,
-  bookings: PropTypes.arrayOf(PropTypes.string)
+  bookings: PropTypes.arrayOf(PropTypes.object)
 };
 
 const defaultProps = {
@@ -68,10 +68,12 @@ export default class TimeSelect extends PureComponent {
         let classSet = '';
         classSet += dateFns.isBefore(timePick, closeTime) ? '' : ' disabled';
         classSet += dateFns.isWithinRange(timePick, this.props.startTime, this.props.endTime) ? ' selectedTime' : '';
-        // if (this.props.bookings) classSet += this.props.bookings.includes(timePick) ? ' booked' : ''
+        {this.props.bookings.map( (booking) =>
+          classSet += dateFns.isWithinRange(timePick, booking.start_time, dateFns.subMinutes(booking.end_time, 1)) ? ' disabled' : '',
+        )}
+
         const cloneTime = timePick;
         timeSlots.push(
-
           <TimeSlot
             key = {cloneTime}
             time = {dateFns.format(cloneTime, dateFormat)}

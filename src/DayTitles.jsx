@@ -15,14 +15,14 @@ export default class DayTitles extends React.Component {
     const dateFormat = window.innerWidth > 767 ? "dddd" : "ddd";
     const days = [];
     let startDate = dateFns.startOfWeek(this.props.currentMonth);
-    for (let i = 0; i < 7; i++) {
+    [...Array(7)].map((e, i) =>
       days.push(
         <div className="col col-center" key={i}>
 
           {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
         </div>
-      );
-    }
+      )
+    );
     return <div className="days row">
       {days}
     </div>;

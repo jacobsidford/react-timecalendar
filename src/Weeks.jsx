@@ -8,7 +8,7 @@ const propTypes = {
   selectedDate: PropTypes.instanceOf(Date),
   onDateClick: PropTypes.func,
   clickable: PropTypes.bool,
-  bookings: PropTypes.arrayOf(PropTypes.string)
+  bookings: PropTypes.arrayOf(PropTypes.object)
 };
 
 const defaultProps = {

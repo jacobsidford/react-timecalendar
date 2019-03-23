@@ -8,7 +8,19 @@ class Welcome extends React.Component {
     super(props);
     this.state = {
       startTime: '',
-      endTime: ''
+      endTime: '',
+      bookings: [
+        {
+          id: 1,
+          start_time: "2019-03-27 13:00:00",
+          end_time: "2019-03-27 13:30:00"
+        },
+        {
+          id: 2,
+          start_time: "2019-03-27 07:00:00",
+          end_time: "2019-03-27 07:30:00",
+        }
+      ]
     };
     this.handleTimeClick = this.handleTimeClick.bind(this);
   }
@@ -18,13 +30,23 @@ class Welcome extends React.Component {
         startTime: time
       });
     }
-    else if (!dateFns.isSameDay(this.state.startTime, time) || time<this.state.startTime){
+    else if(!dateFns.isSameDay(this.state.startTime, time) || time<this.state.startTime){
       this.setState({
         startTime: '',
         endTime: ''
       });
     }
-    else{
+
+    let interceptingBooking = false;
+    if(time >this.state.startTime){
+      {this.state.bookings.map( (booking) =>
+        dateFns.isWithinRange(booking.start_time, this.state.startTime, time) ||
+        dateFns.isWithinRange(dateFns.subMinutes(booking.end_time, 1), this.state.startTime, time )
+        ? interceptingBooking = true : ''
+      )}
+    }
+
+    if(!interceptingBooking){
       this.setState({
         endTime: time
       });
@@ -53,6 +75,7 @@ class Welcome extends React.Component {
           endTime = {this.state.endTime}
           openHours = {openHours}
           onTimeClick = {this.handleTimeClick}
+          bookings = {this.state.bookings}
           />
 
       </div>
@@ -63,4 +86,7 @@ class Welcome extends React.Component {
 
 export default Welcome;
 
-ReactDOM.render(<Welcome />, document.getElementById('root'));
+ReactDOM.render(
+  <Welcome />,
+  document.getElementById('root')
+);

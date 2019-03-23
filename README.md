@@ -7,6 +7,7 @@ Ideal for building a booking system in React.
 - [Date Selector](#date-selector)
 - [Time Selector](#time-selector)
 - [Multi-Selection](#multi-selection)
+- [Booked timeslots](#booked-timeslots)
 - [Open CSS for styling](#styling)
 
 ## Try it out
@@ -59,7 +60,7 @@ const MyCalendar = () => (
 | `timeSlot`       | number      | 30      | Amount of time needed for each booking.                |
 | `onDateFunction` | function    | null    | Function called on click of calendar day, returns day  |
 | `onTimeFunction` | function    | null    | Function called on click of time slot, returns time    |
-| `bookings`       | array       | '[]'    | TODO :Days/times that will be rendered unavailable     |
+| `bookings`       | array       | '[]'    | Times that will be rendered unavailable                |
 | `startTime`      | object      | null    | MultiPick: First time selected                         |
 | `endTime`        | object      | null    | MultiPick: Second time selected, often finish time     |
 
@@ -88,7 +89,7 @@ const openHours = [
 ```
 To activate time selection, timeSlot, openHours and onTimeClick must be provided with clickable being true.
 ## Styling
-
+To allow for styling I've used scss instead of styled components.
 CSS class taxonomy:
 
 ```sass
@@ -204,8 +205,49 @@ class DemoCalendar extends React.Component {
   }
 }
 ```
+#### Booked Timeslots
+Calendar can receive an array of bookings and will then add .disabled to times which
+are within the inclusive booked times provided. You can do an edit of the handleTimeClick
+function above to make sure the bookings cannot be included in a multi selection booking.
+
+The booking times can come in multiple formats as they're parsed
+by dateFns. If there's any errors, try using Javascript Date objects.
+```js
+render () {
+  const openHours = [
+    [9.5, 15]
+  ];
+  const bookings = [
+          {
+            id: 1,
+            start_time: "2019-03-27 13:00:00",
+            end_time: "2019-03-27 13:30:00"
+          },
+          {
+            id: 2,
+            start_time: "2019-03-27 07:00:00",
+            end_time: "2019-03-27 07:30:00",
+          }
+        ];
+
+  return(
+    <div>
+      <TimeCalendar
+        clickable
+        timeSlot = {30}
+        openHours = {openHours}
+        onTimeClick = {this.handleTimeClick}
+        bookings = {bookings}
+        startTime = {this.state.startTime}
+        endTime = {this.state.endTime}
+        />
+    </div>
+  );
+}
+```
 ### TODO:
-- [ ] Take in bookings data and disable relative days/timeslots
+- [x] Take in bookings data and disable relative timeslots
+- [ ] Bookings also disable days if timeslots not available
 - [x] Allow multiple timeSlot selection
 - [x] Multiple day selection if not using time picker  
 - [ ] Allow onClick URL's in bookings displayed on calendar
