@@ -7,7 +7,7 @@ Ideal for building a booking system in React.
 - [Date Selector](#date-selector)
 - [Time Selector](#time-selector)
 - [Multi-Selection](#multi-selection)
-- [Booked timeslots](#booked-timeslots)
+- [Booked Timeslots](#booked-timeslots)
 - [Open CSS for styling](#styling)
 
 ## Try it out
@@ -62,7 +62,7 @@ const MyCalendar = () => (
 | `onTimeFunction` | function    | null    | Function called on click of time slot, returns time    |
 | `bookings`       | array       | '[]'    | Times that will be rendered unavailable                |
 | `startTime`      | object      | null    | MultiPick: First time selected                         |
-| `endTime`        | object      | null    | MultiPick: Second time selected, often finish time     |
+| `endTime`        | object      | null    | MultiPick: Second time selected, must be > first time  |
 
 ### Open Hours
 Opening hours can be of varying 24 hour value array lengths, with `[i][0]` being open time and `[i][1]` being closing.
@@ -85,7 +85,8 @@ const openHours = [
   [0, 0],
   [9, 17]
 ];
-//7 array's to indicate each day of the week, to not offer timeSlots on that day.
+// 7 array's to indicate each day of the week.
+// To set yourself as closed on a day, open == close
 ```
 To activate time selection, timeSlot, openHours and onTimeClick must be provided with clickable being true.
 ## Styling
@@ -251,6 +252,7 @@ render () {
 - [x] Allow multiple timeSlot selection
 - [x] Multiple day selection if not using time picker  
 - [ ] Allow onClick URL's in bookings displayed on calendar
+- [ ] Potentially make time selection appear as a modal/dialog for better UX
 
 ## Dependencies
 [react](https://github.com/facebook/react)
