@@ -66,7 +66,8 @@ export default class TimeSelect extends PureComponent {
     while(timePick < dateFns.addMinutes(closeTime, timeSlot * difference)){
       for (let i = 0; i < 4; i++) {
         let classSet = '';
-        classSet += dateFns.isBefore(timePick, closeTime) ? '' : ' disabled'
+        classSet += dateFns.isBefore(timePick, closeTime) ? '' : ' disabled';
+        classSet += dateFns.isWithinRange(timePick, this.props.startTime, this.props.endTime) ? ' selectedTime' : '';
         // if (this.props.bookings) classSet += this.props.bookings.includes(timePick) ? ' booked' : ''
         const cloneTime = timePick;
         timeSlots.push(

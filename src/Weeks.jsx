@@ -40,6 +40,7 @@ export default class Weeks extends PureComponent {
         classSet += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
         classSet += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''
         classSet += this.props.clickable ? '' : ' disabled'
+        classSet += dateFns.isWithinRange(day, this.props.startTime, this.props.endTime) ? ' selected' : '';
 
         const cloneDay = day;
         days.push(

@@ -1,7 +1,14 @@
 
 # React Time Calendar
-Lightweight and customizable date/time picker for react.js
+Lightweight and customizable date/time picker for react.js, simply pass in a callback function to receive selected date, time or time periods of both.
+Ideal for building a booking system in React.
 ![Date selection calendar](./public/images/screen1.png?raw=true "Screenshot of calendar")
+## Features
+- [Date Selector](#date-selector)
+- [Time Selector](#time-selector)
+- [Multi-Selection](#multi-selection)
+- [Open CSS for styling](#styling)
+
 ## Try it out
 ```bash
 $ git clone https://github.com/jacobsidford/react-timecalendar.git
@@ -50,10 +57,13 @@ const MyCalendar = () => (
 | `disableHistory` | bool        | `true`  | Disable navigating before current month.               |
 | `clickable`      | bool        | `true`  | Make days clickable.                                   |
 | `timeSlot`       | number      | 30      | Amount of time needed for each booking.                |
-| `onDateFunction` | function    | null    | Function called on click of calendar day.              |
-| `onTimeFunction` | function    | null    | Function called on click of time slot.                 |
+| `onDateFunction` | function    | null    | Function called on click of calendar day, returns day  |
+| `onTimeFunction` | function    | null    | Function called on click of time slot, returns time    |
 | `bookings`       | array       | '[]'    | TODO :Days/times that will be rendered unavailable     |
+| `startTime`      | object      | null    | MultiPick: First time selected                         |
+| `endTime`        | object      | null    | MultiPick: Second time selected, often finish time     |
 
+### Open Hours
 Opening hours can be of varying 24 hour value array lengths, with `[i][0]` being open time and `[i][1]` being closing.
 ```js
 const openHours = [
@@ -76,7 +86,7 @@ const openHours = [
 ];
 //7 array's to indicate each day of the week, to not offer timeSlots on that day.
 ```
-To activate time selection, timeSlot and onTimeClick must be provided with clickable being true.
+To activate time selection, timeSlot, openHours and onTimeClick must be provided with clickable being true.
 ## Styling
 
 CSS class taxonomy:
@@ -92,6 +102,7 @@ CSS class taxonomy:
       .col
       .selected
       .disabled
+      .selectedTime
       .sun
       .mon
       .tue
@@ -117,38 +128,92 @@ CSS class taxonomy:
 }
 
 ```
+## Feature Demo's:
+#### Date Selector
+Standard calendar for selecting a date. onDateClick returns the selected date object.
+```js
+<TimeCalendar
+clickable
+onDateClick = {this.handleDateClick}
+/>
+```
+#### Time Selector
+Allows selection of time slots for selected day, takes into account [open hours](#open-hours) and breaks them up into slots by dividing them via timeSlot. onTimeClick returns the selected time object.
+```js
+const openHours = [
+  [9.5, 15]
+];
+<TimeCalendar
+clickable
+timeSlot = {30}
+openHours = {openHours}
+onTimeClick = {this.handleTimeClick}
+/>
+```
+#### Multi Selection
+The calendar also supports selection of multiple time slots or days at once to allow
+extended bookings, this is done by passing in startTime and endTime props and a function
+which updates these values. A starting point using date-fns is below.
+
+To change from multiple time slots to multiple days, remove `!dateFns.isSameDay(this.state.startTime, time) ||` from handleTimeClick and change the props to pass the function to onDateClick instead of onTimeClick.
+```js
+class DemoCalendar extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      startTime: '',
+      endTime: ''
+    };
+    this.handleTimeClick = this.handleTimeClick.bind(this);
+  }
+  handleTimeClick(time) {
+    if(this.state.startTime === ''){
+      this.setState({
+        startTime: time
+      });
+    }
+    else if (!dateFns.isSameDay(this.state.startTime, time) || time<this.state.startTime){
+      this.setState({
+        startTime: '',
+        endTime: ''
+      });
+    }
+    else{
+      this.setState({
+        endTime: time
+      });
+    }
+  };
+
+  render () {
+    const openHours = [
+      [9.5, 15]
+    ];
+    return(
+      <div>
+        <TimeCalendar
+          clickable
+          timeSlot = {30}
+          openHours = {openHours}
+          onTimeClick = {this.handleTimeClick}
+          startTime = {this.state.startTime}
+          endTime = {this.state.endTime}
+          />
+      </div>
+    );
+  }
+}
+```
 ### TODO:
-- [ ] Take in bookings data and disable relative days/timeslots.
-- [ ] Allow multiple timeSlot selection
-- [ ] Multiple day selection if not using time picker  
+- [ ] Take in bookings data and disable relative days/timeslots
+- [x] Allow multiple timeSlot selection
+- [x] Multiple day selection if not using time picker  
+- [ ] Allow onClick URL's in bookings displayed on calendar
 
 ## Dependencies
 [react](https://github.com/facebook/react)
 
 [date-fns](https://github.com/date-fns/date-fns)
-<!-- ## Usage
-
-Here you should write what are all of the configurations a user can enter when
-using the project.
-
-#### Argument 1
-Type: `String`  
-Default: `'default value'`
-
-State what an argument does and how you can use it. If needed, you can provide
-an example below.
-
-Example:
-```bash
-awesome-project "Some other value"  # Prints "You're nailing this readme!"
-```
-
-#### Argument 2
-Type: `Number|Boolean`  
-Default: 100
-
-Copy-paste as many of these as you need. -->
-
 ## Style guide
 Following Airbnb's [styling guide](https://github.com/airbnb/javascript/tree/master/react)
 

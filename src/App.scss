@@ -156,6 +156,9 @@
         color: var(--text-color-light);
         pointer-events: none;
       }
+      .selectedTime {
+      color: var(--main-color);
+      }
     }
     .cell .bg {
       font-weight: 700;

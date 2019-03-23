@@ -76,14 +76,18 @@ export default class TimeCalendar extends PureComponent {
           onDateClick={this.onDateClick}
           clickable={this.props.clickable}
           bookings={this.props.bookings}
+          startTime={this.props.startTime}
+          endTime={this.props.endTime}
           />
-        {this.props.timeSlot && this.props.clickable && this.props.onTimeClick ?
+        {this.props.timeSlot && this.props.clickable && this.props.onTimeClick && this.props.openHours ?
           <TimeSelect
             selectedDate={this.state.selectedDate}
             timeSlot={this.props.timeSlot}
             openHours={this.props.openHours}
             onTimeClick={this.props.onTimeClick}
             bookings={this.props.bookings}
+            startTime={this.props.startTime}
+            endTime={this.props.endTime}
             /> : ""}
           </div>
         );
