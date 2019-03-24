@@ -68,6 +68,7 @@ export default class TimeSelect extends PureComponent {
         let classSet = '';
         classSet += dateFns.isBefore(timePick, closeTime) ? '' : ' disabled';
         classSet += dateFns.isWithinRange(timePick, this.props.startTime, this.props.endTime) ? ' selectedTime' : '';
+        if(this.props.disableHistory)classSet += dateFns.isBefore(timePick, new Date()) ? ' disabled' : '';
         {this.props.bookings.map( (booking) =>
           classSet += dateFns.isWithinRange(timePick, booking.start_time, dateFns.subMinutes(booking.end_time, 1)) ? ' disabled' : '',
         )}

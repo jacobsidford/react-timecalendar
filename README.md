@@ -54,9 +54,10 @@ const MyCalendar = () => (
 
 | Prop             | Type        | Default | Description                                            |
 | :--------------- | :---------- | :------ | :----------------------------------------------------- |
-| `openHours`      | array       | `[][]`  | Times slots that will be rendered available.           |
 | `disableHistory` | bool        | `true`  | Disable navigating before current month.               |
 | `clickable`      | bool        | `true`  | Make days clickable.                                   |
+| `localTz`        | bool        | `true`  | TODO:Converts provided booking times to local timezone |
+| `openHours`      | array       | `[][]`  | Times slots that will be rendered available.           |
 | `timeSlot`       | number      | 30      | Amount of time needed for each booking.                |
 | `onDateFunction` | function    | null    | Function called on click of calendar day, returns day  |
 | `onTimeFunction` | function    | null    | Function called on click of time slot, returns time    |
@@ -253,6 +254,8 @@ render () {
 - [x] Multiple day selection if not using time picker  
 - [ ] Allow onClick URL's in bookings displayed on calendar
 - [ ] Potentially make time selection appear as a modal/dialog for better UX
+- [ ] Local timezone conversion option
+- [ ] Clean up code (recent features were rushed as this is part of a build)
 
 ## Dependencies
 [react](https://github.com/facebook/react)

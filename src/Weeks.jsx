@@ -16,7 +16,7 @@ const defaultProps = {
   selectedDate: null,
   onDateClick: null,
   clickable: true,
-  bookings: ['07-03-19', '02-04-19'],
+  bookings: [],
 };
 
 export default class Weeks extends PureComponent {
@@ -40,7 +40,8 @@ export default class Weeks extends PureComponent {
         classSet += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
         classSet += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''
         classSet += this.props.clickable ? '' : ' disabled'
-        classSet += dateFns.isWithinRange(day, this.props.startTime, this.props.endTime) ? ' selected' : '';
+        classSet += dateFns.isWithinRange(day, this.props.startTime, this.props.endTime) ? ' selected' : ''
+        if(this.props.disableHistory)classSet += dateFns.isBefore(day, dateFns.endOfYesterday()) ? ' disabled' : '';
 
         const cloneDay = day;
         days.push(

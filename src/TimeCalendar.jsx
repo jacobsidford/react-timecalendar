@@ -18,7 +18,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  bookings:["07-03-19', '02-04-19"],
+  bookings:[],
   disableHistory: true,
   clickable: true,
   timeSlot: 30,
@@ -73,6 +73,7 @@ export default class TimeCalendar extends PureComponent {
         <Weeks
           currentMonth={this.state.currentMonth}
           selectedDate={this.state.selectedDate}
+          disableHistory={this.props.disableHistory}
           onDateClick={this.onDateClick}
           clickable={this.props.clickable}
           bookings={this.props.bookings}
@@ -82,6 +83,7 @@ export default class TimeCalendar extends PureComponent {
         {this.props.timeSlot && this.props.clickable && this.props.onTimeClick && this.props.openHours ?
           <TimeSelect
             selectedDate={this.state.selectedDate}
+            disableHistory={this.props.disableHistory}
             timeSlot={this.props.timeSlot}
             openHours={this.props.openHours}
             onTimeClick={this.props.onTimeClick}
