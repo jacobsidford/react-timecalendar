@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
-  currentMonth: PropTypes.string,
+  selectedDate: PropTypes.string,
   prevMonth: PropTypes.func,
   nextMonth: PropTypes.func,
 };
 
 const defaultProps = {
-  currentMonth: new Date(),
+  selectedDate: new Date(),
   prevMonth: null,
   nextMonth: null,
 };
@@ -18,7 +18,7 @@ function Header(props) {
     <div className="header row flex-middle">
 
       <div className="col col-start">
-        
+
         <div className="icon" onClick={props.prevMonth}>
           chevron_left
         </div>
@@ -28,7 +28,7 @@ function Header(props) {
       <div className="col col-center">
 
         <span>
-          {props.currentMonth}
+          {props.selectedDate}
         </span>
 
       </div>

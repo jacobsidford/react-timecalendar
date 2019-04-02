@@ -6,7 +6,6 @@ import DayTitles from './DayTitles';
 import Day from './Day';
 
 const propTypes = {
-  currentMonth: PropTypes.instanceOf(Date),
   selectedDate: PropTypes.instanceOf(Date),
   onDateClick: PropTypes.func,
   clickable: PropTypes.bool,
@@ -14,7 +13,6 @@ const propTypes = {
 };
 
 const defaultProps = {
-  currentMonth: null,
   selectedDate: null,
   onDateClick: null,
   clickable: true,
@@ -23,8 +21,8 @@ const defaultProps = {
 
 export default class Weeks extends PureComponent {
   render() {
-    const {currentMonth, selectedDate} = this.props;
-    const monthStart = dateFns.startOfMonth(currentMonth);
+    const {selectedDate} = this.props;
+    const monthStart = dateFns.startOfMonth(selectedDate);
     const startDate = dateFns.startOfWeek(monthStart);
     const endDate = dateFns.endOfWeek(dateFns.endOfMonth(monthStart));
 
@@ -39,7 +37,7 @@ export default class Weeks extends PureComponent {
         let classSet = '';
         classSet += ' ' + dateFns.format(day, 'ddd');
         classSet += dateFns.isToday(day) ? ' today' : ''
-        classSet += dateFns.isSameMonth(day, currentMonth) ? '' : ' disabled'
+        classSet += dateFns.isSameMonth(day, selectedDate) ? '' : ' disabled'
         classSet += dateFns.isSameDay(day, selectedDate) ? ' selected' : ''
         classSet += this.props.clickable ? '' : ' disabled'
         classSet += dateFns.isWithinRange(day, this.props.startTime, this.props.endTime) ? ' selected' : ''
@@ -66,7 +64,7 @@ export default class Weeks extends PureComponent {
     }
     return (
       <div className="body">
-        <DayTitles currentMonth={this.props.currentMonth} />
+        <DayTitles currentMonth={this.props.selectedDate} />
         {rows}
       </div>
     );

@@ -29,7 +29,6 @@ export default class TimeCalendar extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      currentMonth: new Date(),
       selectedDate: new Date(),
       timeSelect: false,
     };
@@ -48,18 +47,18 @@ export default class TimeCalendar extends PureComponent {
 
   nextMonth() {
     this.setState({
-      currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
+      selectedDate: dateFns.addMonths(this.state.selectedDate, 1)
     });
   };
 
   prevMonth() {
     if (this.props.disableHistory) {
-      if (dateFns.isPast(this.state.currentMonth)){
+      if (dateFns.isPast(dateFns.startOfMonth(this.state.selectedDate))){
         return
       }
     }
     this.setState({
-      currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
+      selectedDate: dateFns.subMonths(this.state.selectedDate, 1)
     });
   };
 
@@ -73,7 +72,7 @@ export default class TimeCalendar extends PureComponent {
     return (
       <div className="calendar">
         <Header
-          currentMonth={dateFns.format(this.state.currentMonth, "MMMM YYYY")}
+          selectedDate={dateFns.format(this.state.selectedDate, "MMMM YYYY")}
           nextMonth={this.nextMonth}
           prevMonth={this.prevMonth}
           />
@@ -93,7 +92,6 @@ export default class TimeCalendar extends PureComponent {
           :
           <React.Fragment>
             <Weeks
-              currentMonth={this.state.currentMonth}
               selectedDate={this.state.selectedDate}
               disableHistory={this.props.disableHistory}
               onDateClick={this.onDateClick}
