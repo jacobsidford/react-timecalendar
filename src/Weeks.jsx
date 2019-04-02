@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
 import dateFns from "date-fns";
+import Header from './Header';
+import DayTitles from './DayTitles';
 import Day from './Day';
 
 const propTypes = {
@@ -62,9 +64,14 @@ export default class Weeks extends PureComponent {
       );
       days = [];
     }
-    return <div className="body">{rows}</div>;
-    }
+    return (
+      <div className="body">
+        <DayTitles currentMonth={this.props.currentMonth} />
+        {rows}
+      </div>
+    );
   }
+}
 
-  Weeks.propTypes = propTypes;
-  Weeks.defaultProps = defaultProps;
+Weeks.propTypes = propTypes;
+Weeks.defaultProps = defaultProps;

@@ -2,7 +2,6 @@ import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
 import dateFns from 'date-fns';
 import Header from './Header';
-import DayTitles from './DayTitles';
 import Weeks from './Weeks';
 import TimeSelect from './TimeSelect';
 import './App.scss';
@@ -69,7 +68,6 @@ export default class TimeCalendar extends PureComponent {
           nextMonth={this.nextMonth}
           prevMonth={this.prevMonth}
           />
-        <DayTitles currentMonth={this.state.currentMonth} />
         <Weeks
           currentMonth={this.state.currentMonth}
           selectedDate={this.state.selectedDate}
@@ -79,6 +77,8 @@ export default class TimeCalendar extends PureComponent {
           bookings={this.props.bookings}
           startTime={this.props.startTime}
           endTime={this.props.endTime}
+          nextMonth={this.nextMonth}
+          prevMonth={this.prevMonth}
           />
         {this.props.timeSlot && this.props.clickable && this.props.onTimeClick && this.props.openHours ?
           <TimeSelect
