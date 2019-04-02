@@ -89,10 +89,11 @@ const openHours = [
 // 7 array's to indicate each day of the week.
 // To set yourself as closed on a day, open == close
 ```
-To activate time selection, timeSlot, openHours and onTimeClick must be provided with clickable being true.
+To activate time selection timeSlot and openHours must be provided.
 ## Styling
-To allow for styling I've used scss instead of styled components.
-CSS class taxonomy:
+To allow for styling I've used SCSS instead of styled components to make it easy
+to make style changes
+SCSS class taxonomy:
 
 ```sass
 .calendar{

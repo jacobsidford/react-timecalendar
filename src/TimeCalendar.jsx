@@ -31,10 +31,12 @@ export default class TimeCalendar extends PureComponent {
     this.state = {
       currentMonth: new Date(),
       selectedDate: new Date(),
+      timeSelect: false,
     };
     this.onDateClick = this.onDateClick.bind(this);
     this.nextMonth = this.nextMonth.bind(this);
     this.prevMonth = this.prevMonth.bind(this);
+    this.timeSelectToggle = this.timeSelectToggle.bind(this);
   }
 
   onDateClick(day) {
@@ -60,6 +62,13 @@ export default class TimeCalendar extends PureComponent {
       currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
     });
   };
+
+  timeSelectToggle() {
+    this.setState({
+      timeSelect: !this.state.timeSelect
+    });
+  };
+
   render() {
     return (
       <div className="calendar">
@@ -68,33 +77,45 @@ export default class TimeCalendar extends PureComponent {
           nextMonth={this.nextMonth}
           prevMonth={this.prevMonth}
           />
-        <Weeks
-          currentMonth={this.state.currentMonth}
-          selectedDate={this.state.selectedDate}
-          disableHistory={this.props.disableHistory}
-          onDateClick={this.onDateClick}
-          clickable={this.props.clickable}
-          bookings={this.props.bookings}
-          startTime={this.props.startTime}
-          endTime={this.props.endTime}
-          nextMonth={this.nextMonth}
-          prevMonth={this.prevMonth}
-          />
-        {this.props.timeSlot && this.props.clickable && this.props.onTimeClick && this.props.openHours ?
-          <TimeSelect
-            selectedDate={this.state.selectedDate}
-            disableHistory={this.props.disableHistory}
-            timeSlot={this.props.timeSlot}
-            openHours={this.props.openHours}
-            onTimeClick={this.props.onTimeClick}
-            bookings={this.props.bookings}
-            startTime={this.props.startTime}
-            endTime={this.props.endTime}
-            /> : ""}
-          </div>
-        );
-      }
-    }
+        {this.state.timeSelect ?
+          <React.Fragment>
+            <TimeSelect
+              selectedDate={this.state.selectedDate}
+              disableHistory={this.props.disableHistory}
+              timeSlot={this.props.timeSlot}
+              openHours={this.props.openHours}
+              onTimeClick={this.props.onTimeClick}
+              bookings={this.props.bookings}
+              startTime={this.props.startTime}
+              endTime={this.props.endTime}
+              />
+          </React.Fragment>
+          :
+          <React.Fragment>
+            <Weeks
+              currentMonth={this.state.currentMonth}
+              selectedDate={this.state.selectedDate}
+              disableHistory={this.props.disableHistory}
+              onDateClick={this.onDateClick}
+              clickable={this.props.clickable}
+              bookings={this.props.bookings}
+              startTime={this.props.startTime}
+              endTime={this.props.endTime}
+              />
+          </React.Fragment>
 
-    TimeCalendar.propTypes = propTypes;
-    TimeCalendar.defaultProps = defaultProps;
+        }
+        {this.props.timeSlot && this.props.openHours?
+          <React.Fragment>
+            <div className={'timeSelector'}>
+              <p onClick={this.timeSelectToggle}>Selector</p>
+            </div>
+          </React.Fragment>
+        :''}
+      </div>
+    );
+  }
+}
+
+TimeCalendar.propTypes = propTypes;
+TimeCalendar.defaultProps = defaultProps;
