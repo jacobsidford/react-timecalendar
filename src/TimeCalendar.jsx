@@ -108,7 +108,7 @@ export default class TimeCalendar extends PureComponent {
         {this.props.timeSlot && this.props.openHours?
           <React.Fragment>
             <div className={'timeSelector'}>
-              <p onClick={this.timeSelectToggle}>Selector</p>
+              <p onClick={this.timeSelectToggle}>{this.state.timeSelect ? "Select Day" : "Select Time" } </p>
             </div>
           </React.Fragment>
         :''}

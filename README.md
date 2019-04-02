@@ -125,7 +125,6 @@ SCSS class taxonomy:
         .inactive
         .optionSpacer
         .optionHolder{
-          p
           .col
         }
    }

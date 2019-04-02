@@ -95,7 +95,6 @@ export default class TimeSelect extends PureComponent {
 
     return (
       <div className={'timeSelector'}>
-        <p onClick={this.selectorClick}>Make a booking</p>
         <div className={"optionSpacer body"}>
           <div className={"optionHolder " + this.state.selectorClass}>
             {rows}
