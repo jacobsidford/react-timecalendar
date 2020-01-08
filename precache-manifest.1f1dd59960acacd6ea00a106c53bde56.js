@@ -4,19 +4,19 @@ self.__precacheManifest = [
     "url": "/react-timecalendar/static/js/runtime~main.ebeab96a.js"
   },
   {
-    "revision": "c477b01d50c54e472d66",
-    "url": "/react-timecalendar/static/js/main.c477b01d.chunk.js"
+    "revision": "58b5bff5c284ab124ea0",
+    "url": "/react-timecalendar/static/js/main.58b5bff5.chunk.js"
   },
   {
     "revision": "636d9a39a274ad97b0c0",
     "url": "/react-timecalendar/static/js/2.636d9a39.chunk.js"
   },
   {
-    "revision": "c477b01d50c54e472d66",
-    "url": "/react-timecalendar/static/css/main.9c31abfa.chunk.css"
+    "revision": "58b5bff5c284ab124ea0",
+    "url": "/react-timecalendar/static/css/main.220a5107.chunk.css"
   },
   {
-    "revision": "9fce447835f16ab05ea86232700584f0",
+    "revision": "20a9bf933827c866d15a37c74efd0cfe",
     "url": "/react-timecalendar/index.html"
   }
 ];
