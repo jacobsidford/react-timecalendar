@@ -252,10 +252,11 @@ render () {
 - [ ] Bookings also disable days if timeslots not available
 - [x] Allow multiple timeSlot selection
 - [x] Multiple day selection if not using time picker  
+- [ ] Closed message when no time slots available for that day
 - [ ] Allow onClick URL's in bookings displayed on calendar
 - [ ] Potentially make time selection appear as a modal/dialog for better UX
 - [ ] Local timezone conversion option
-- [ ] Clean up code (recent features were rushed as this is part of a build)
+- [ ] When in time select, change next/prev month to day
 
 ## Dependencies
 [react](https://github.com/facebook/react)

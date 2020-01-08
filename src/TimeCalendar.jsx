@@ -77,7 +77,7 @@ export default class TimeCalendar extends PureComponent {
           prevMonth={this.prevMonth}
           />
         {this.state.timeSelect ?
-          <React.Fragment>
+          <>
             <TimeSelect
               selectedDate={this.state.selectedDate}
               disableHistory={this.props.disableHistory}
@@ -88,9 +88,9 @@ export default class TimeCalendar extends PureComponent {
               startTime={this.props.startTime}
               endTime={this.props.endTime}
               />
-          </React.Fragment>
+          </>
           :
-          <React.Fragment>
+          <>
             <Weeks
               selectedDate={this.state.selectedDate}
               disableHistory={this.props.disableHistory}
@@ -100,15 +100,15 @@ export default class TimeCalendar extends PureComponent {
               startTime={this.props.startTime}
               endTime={this.props.endTime}
               />
-          </React.Fragment>
+          </>
 
         }
         {this.props.timeSlot && this.props.openHours?
-          <React.Fragment>
+          <>
             <div className={'timeSelector'}>
               <p onClick={this.timeSelectToggle}>{this.state.timeSelect ? "Select Day" : "Select Time" } </p>
             </div>
-          </React.Fragment>
+          </>
         :''}
       </div>
     );

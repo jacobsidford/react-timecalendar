@@ -1,7 +1,6 @@
 import React, { PureComponent } from "react";
 import PropTypes from 'prop-types';
 import dateFns from "date-fns";
-import Header from './Header';
 import DayTitles from './DayTitles';
 import Day from './Day';
 

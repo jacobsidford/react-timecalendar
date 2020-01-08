@@ -1,6 +1,6 @@
 {
   "name": "react-timecalendar",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lightweight React calendar with time options for booking",
   "main": "./src/TimeCalendar.jsx",
   "homepage": "https://jacobsidford.github.io/react-timecalendar/",

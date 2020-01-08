@@ -4,6 +4,7 @@ import dateFns from "date-fns";
 import TimeSlot from './TimeSlot';
 
 const propTypes = {
+  disableHistory: PropTypes.bool,
   selectedDate: PropTypes.instanceOf(Date),
   timeSlot: PropTypes.number,
   openHours: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.number)),
@@ -23,6 +24,7 @@ export default class TimeSelect extends PureComponent {
     super(props);
     this.state = {selectorClass: 'inactive'};
     this.selectorClick = this.selectorClick.bind(this);
+    this.generateOpenHours = this.generateOpenHours.bind(this);
   }
 
   selectorClick() {
@@ -31,48 +33,49 @@ export default class TimeSelect extends PureComponent {
     });
   };
 
-  render(){
+  generateOpenHours() {
+    const openTimes = [];
     const openHours = this.props.openHours;
-    const timeSlot = this.props.timeSlot;
     const dayStart = dateFns.startOfDay(this.props.selectedDate);
-    let dayNum = parseInt(dateFns.format(this.props.selectedDate, 'd'));
-    let openTime = dayStart;
-    let closeTime = dateFns.endOfDay(dayStart);
-
+    const dayNum = parseInt(dateFns.format(this.props.selectedDate, 'd'));
     if(openHours.length === 1){
-      openTime=dateFns.addHours(dayStart, openHours[0][0]);
-      closeTime=dateFns.addHours(dayStart, openHours[0][1]);
+      openTimes[0]=dateFns.addHours(dayStart, openHours[0][0]);
+      openTimes[1]=dateFns.addHours(dayStart, openHours[0][1]);
     }
     else if(openHours.length === 2) {
       if(dayNum === 0 || dayNum === 6) {
-        openTime=dateFns.addHours(dayStart, openHours[1][0]);
-        closeTime=dateFns.addHours(dayStart, openHours[1][1]);
+        openTimes[0]=dateFns.addHours(dayStart, openHours[1][0]);
+        openTimes[1]=dateFns.addHours(dayStart, openHours[1][1]);
       }
       else {
-        openTime=dateFns.addHours(dayStart, openHours[0][0]);
-        closeTime=dateFns.addHours(dayStart, openHours[0][1]);
+        openTimes[0]=dateFns.addHours(dayStart, openHours[0][0]);
+        openTimes[1]=dateFns.addHours(dayStart, openHours[0][1]);
       }
     }
     else if(openHours.length === 7){
-      openTime=dateFns.addHours(dayStart, openHours[dayNum][0]);
-      closeTime=dateFns.addHours(dayStart, openHours[dayNum][1])
+      openTimes[0]=dateFns.addHours(dayStart, openHours[dayNum][0]);
+      openTimes[1]=dateFns.addHours(dayStart, openHours[dayNum][1])
     }
+    return openTimes;
+  }
 
+  render(){
+    const timeSlot = this.props.timeSlot;
     const dateFormat = 'HH-mm';
     const rows = [];
-    let timePick = openTime;
+    const openHours = this.generateOpenHours();
     let timeSlots = [];
-    let difference = dateFns.differenceInMinutes(closeTime, openTime) / timeSlot % 4;
-    while(timePick < dateFns.addMinutes(closeTime, timeSlot * difference)){
+    let timePick = openHours[0];
+    const difference = dateFns.differenceInMinutes(openHours[1], openHours[0]) / timeSlot % 4;
+    while(timePick < dateFns.addMinutes(openHours[1], timeSlot * difference)){
       for (let i = 0; i < 4; i++) {
-        let classSet = '';
-        classSet += dateFns.isBefore(timePick, closeTime) ? '' : ' disabled';
+        let classSet;
+        classSet += dateFns.isBefore(timePick, openHours[1]) ? '' : ' disabled';
         classSet += dateFns.isWithinRange(timePick, this.props.startTime, this.props.endTime) ? ' selectedTime' : '';
         if(this.props.disableHistory)classSet += dateFns.isBefore(timePick, new Date()) ? ' disabled' : '';
         {this.props.bookings.map( (booking) =>
           classSet += dateFns.isWithinRange(timePick, booking.start_time, dateFns.subMinutes(booking.end_time, 1)) ? ' disabled' : '',
         )}
-
         const cloneTime = timePick;
         timeSlots.push(
           <TimeSlot
