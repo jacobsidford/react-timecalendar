@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -9,17 +9,22 @@ const propTypes = {
 
 const defaultProps = {
   classSet: '',
-  time: 12-30,
+  time: '12 - 30',
   onTimeClick: null,
 };
 
 function TimeSlot(props) {
-  return(
+  const { classSet, onTimeClick, time } = props;
+  return (
     <div
-      className={'col cell' + props.classSet}
-      onClick={props.onTimeClick}>
+      className={`col cell ${classSet}`}
+      onClick={onTimeClick}
+      onKeyDown={onTimeClick}
+      role="button"
+      tabIndex="0"
+    >
       <p>
-        {props.time}
+        {time}
       </p>
     </div>
   );

@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
-import dateFns from "date-fns";
+import dateFns from 'date-fns';
 
 const propTypes = {
-  currentMonth: PropTypes.instanceOf(Date)
+  currentMonth: PropTypes.instanceOf(Date),
 };
 
 const defaultProps = {
@@ -11,32 +11,35 @@ const defaultProps = {
 };
 
 export default class DayTitles extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
-    dateFormat: "ddd"
-  };
-}
+      dateFormat: 'ddd',
+    };
+  }
 
   componentDidMount() {
     this.setState({
-      dateFormat: this.refs.dayTitles.parentNode.clientWidth > 767 ? "dddd" : "ddd"
+      dateFormat: this.dayTitles.parentNode.clientWidth > 500 ? 'dddd' : 'ddd',
     });
-}
-  render() {
-    const days = [];
-    let startDate = dateFns.startOfWeek(this.props.currentMonth);
-    [...Array(7)].map((e, i) =>
-      days.push(
-        <div className="col col-center" key={i}>
+  }
 
-          {dateFns.format(dateFns.addDays(startDate, i), this.state.dateFormat)}
-        </div>
-      )
+  render() {
+    const { currentMonth } = this.props;
+    const { dateFormat } = this.state;
+    const days = [];
+    const startDate = dateFns.startOfWeek(currentMonth);
+    [...Array(7)].map((e, i) => days.push(
+      <div className="col col-center" key={e}>
+
+        {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+      </div>,
+    ));
+    return (
+      <div className="days row" ref={(c) => { this.dayTitles = c; }}>
+        {days}
+      </div>
     );
-    return <div className="days row" ref="dayTitles">
-      {days}
-    </div>;
   }
 }
 
