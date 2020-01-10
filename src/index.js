@@ -52,7 +52,7 @@ class Welcome extends React.Component {
   }
 
   render() {
-    const divStyle = window.innerWidth > 1023 ? { width: '40%' } : { width: '100%' };
+    const divStyle = window.innerWidth > 1023 ? { width: '55%' } : { width: '100%' };
     const openHours = [
       [9.5, 15],
       [9, 23.5],

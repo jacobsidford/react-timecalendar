@@ -94,7 +94,7 @@
   line-height: 1.5;
   color: var(--text-color);
   .header {
-    text-transform: uppercase;
+    text-transform: capitalize;
     font-weight: 700;
     font-size: 115%;
     padding: 1.5em 0;

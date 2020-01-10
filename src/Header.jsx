@@ -3,25 +3,25 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   selectedDate: PropTypes.string,
-  prevMonth: PropTypes.func,
-  nextMonth: PropTypes.func,
+  prevTime: PropTypes.func,
+  nextTime: PropTypes.func,
 };
 
 const defaultProps = {
   selectedDate: new Date(),
-  prevMonth: null,
-  nextMonth: null,
+  prevTime: null,
+  nextTime: null,
 };
 
 function Header(props) {
-  const { prevMonth, selectedDate, nextMonth } = props;
+  const { prevTime, selectedDate, nextTime } = props;
   return (
     <div className="header row flex-middle">
       <div className="col col-start">
         <div
           className="icon"
-          onClick={prevMonth}
-          onKeyDown={prevMonth}
+          onClick={prevTime}
+          onKeyDown={prevTime}
           tabIndex="0"
           role="button"
         >
@@ -35,8 +35,8 @@ function Header(props) {
       </div>
       <div
         className="col col-end"
-        onClick={nextMonth}
-        onKeyDown={nextMonth}
+        onClick={nextTime}
+        onKeyDown={nextTime}
         tabIndex="0"
         role="button"
       >

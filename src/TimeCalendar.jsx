@@ -41,8 +41,8 @@ export default class TimeCalendar extends PureComponent {
       timeSelect: false,
     };
     this.onDateClick = this.onDateClick.bind(this);
-    this.nextMonth = this.nextMonth.bind(this);
-    this.prevMonth = this.prevMonth.bind(this);
+    this.nextTime = this.nextTime.bind(this);
+    this.prevTime = this.prevTime.bind(this);
     this.timeSelectToggle = this.timeSelectToggle.bind(this);
   }
 
@@ -54,23 +54,24 @@ export default class TimeCalendar extends PureComponent {
     if (onDateFunction) onDateFunction(day);
   }
 
-  nextMonth() {
-    const { selectedDate } = this.state;
+  nextTime() {
+    const { selectedDate, timeSelect } = this.state;
     this.setState({
-      selectedDate: dateFns.addMonths(selectedDate, 1),
+      selectedDate: timeSelect ? dateFns.addDays(selectedDate, 1) : dateFns.addMonths(selectedDate, 1),
     });
   }
 
-  prevMonth() {
+  prevTime() {
+    const { selectedDate, timeSelect } = this.state;
     const { disableHistory } = this.props;
-    const { selectedDate } = this.state;
-    if (disableHistory) {
-      if (dateFns.isPast(dateFns.startOfMonth(selectedDate))) {
-        return;
-      }
-    }
+
+    if (disableHistory
+      && ((dateFns.isPast(dateFns.startOfMonth(selectedDate)) && !timeSelect)
+      || (dateFns.isPast(dateFns.startOfDay(selectedDate)) && timeSelect))
+    ) return;
+
     this.setState({
-      selectedDate: dateFns.subMonths(selectedDate, 1),
+      selectedDate: timeSelect ? dateFns.subDays(selectedDate, 1) : dateFns.subMonths(selectedDate, 1),
     });
   }
 
@@ -89,9 +90,10 @@ export default class TimeCalendar extends PureComponent {
     return (
       <div className="calendar">
         <Header
-          selectedDate={dateFns.format(selectedDate, 'MMMM YYYY')}
-          nextMonth={this.nextMonth}
-          prevMonth={this.prevMonth}
+          selectedDate={!timeSelect ? dateFns.format(selectedDate, 'MMMM YYYY') : dateFns.format(selectedDate, 'dddd Do MMMM')}
+          nextTime={this.nextTime}
+          prevTime={this.prevTime}
+          timeSelect={timeSelect}
         />
         {timeSelect
           ? (
