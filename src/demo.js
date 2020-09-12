@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import dateFns from 'date-fns';
-import TimeCalendar from './TimeCalendar';
+import TimeCalendar from '.';
 
 class Welcome extends React.Component {
   constructor(props) {

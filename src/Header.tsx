@@ -1,19 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+//@ts-nocheck
+import React from "react";
+import { HeaderProps } from "./types";
 
-const propTypes = {
-  selectedDate: PropTypes.string,
-  prevTime: PropTypes.func,
-  nextTime: PropTypes.func,
-};
-
-const defaultProps = {
-  selectedDate: new Date(),
-  prevTime: null,
-  nextTime: null,
-};
-
-function Header(props) {
+function Header(props: HeaderProps) {
   const { prevTime, selectedDate, nextTime } = props;
   return (
     <div className="header row flex-middle">
@@ -22,16 +11,14 @@ function Header(props) {
           className="icon"
           onClick={prevTime}
           onKeyDown={prevTime}
-          tabIndex="0"
+          tabIndex={0}
           role="button"
         >
           chevron_left
         </div>
       </div>
       <div className="col col-center">
-        <span>
-          {selectedDate}
-        </span>
+        <span>{selectedDate}</span>
       </div>
       <div
         className="col col-end"
@@ -45,7 +32,5 @@ function Header(props) {
     </div>
   );
 }
-Header.propTypes = propTypes;
-Header.defaultProps = defaultProps;
 
 export default Header;

@@ -1,7 +1,8 @@
+// @ts-nocheck
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import dateFns from 'date-fns';
-import DayTitles from './DayTitles';
+import DayTitle from './DayTitle';
 import Day from './Day';
 
 const propTypes = {
@@ -69,7 +70,7 @@ export default class Weeks extends PureComponent {
     }
     return (
       <div className="body">
-        <DayTitles currentMonth={selectedDate} />
+        <DayTitle currentMonth={selectedDate} />
         {rows}
       </div>
     );
