@@ -248,23 +248,17 @@ render () {
 }
 ```
 ### TODO:
-- [x] Take in bookings data and disable relative timeslots
 - [ ] Bookings also disable days if timeslots not available
-- [x] Allow multiple timeSlot selection
-- [x] Multiple day selection if not using time picker  
 - [ ] Closed message when no time slots available for that day
 - [ ] Allow onClick URL's in bookings displayed on calendar
 - [ ] Potentially make time selection appear as a modal/dialog for better UX
-- [ ] Local timezone conversion option
-- [ ] When in time select, change next/prev month to day
+- [ ] Improvements to typescript typing
+<!-- - [ ] Local timezone conversion option -->
 
 ## Dependencies
-[react](https://github.com/facebook/react)
-
 [date-fns](https://github.com/date-fns/date-fns)
 ## Style guide
 Following Airbnb's [styling guide](https://github.com/airbnb/javascript/tree/master/react)
-
 
 ## Licensing
 The code in this project is licensed under MIT license.
