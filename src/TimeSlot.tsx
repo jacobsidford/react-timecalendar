@@ -21,7 +21,7 @@ function TimeSlot(props) {
       onClick={onTimeClick}
       onKeyDown={onTimeClick}
       role="button"
-      tabIndex="0"
+      tabIndex={0}
     >
       <p>
         {time}
