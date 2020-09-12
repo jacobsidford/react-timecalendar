@@ -1,8 +1,10 @@
-export interface TestComponentProps {
-    theme: "primary" | "secondary";
-  }
+export type Booking = {
+    id: string,
+    start_time: Date,
+    end_time: Date,
+}
 
-  export interface DayProps {
+export interface DayProps {
     classSet: string,
     date: string,
     onDateClick: Function,
@@ -20,7 +22,7 @@ export interface TestComponentProps {
 
   export interface TimeCalendarProps {
     openHours: number[][],
-    bookings: string[],
+    bookings: Booking[],
     disableHistory: boolean,
     clickable: boolean,
     timeSlot: number,
@@ -31,13 +33,27 @@ export interface TestComponentProps {
   }
 
   export interface TimeSelectProps {
-
+    disableHistory: boolean,
+    selectedDate: Date,
+    timeSlot: number,
+    openHours: number[][],
+    onTimeClick: Function,
+    bookings: Booking[],
+    startTime: string,
+    endTime: string,
   }
 
   export interface TimeSlotProps {
-
+    classSet: string,
+    time: string,
+    onTimeClick: Function,
   }
 
   export interface WeeksProps {
-
+    selectedDate: Date,
+    onDateClick: Function,
+    clickable: boolean,
+    disableHistory: boolean,
+    startTime: string,
+    endTime: string
   }

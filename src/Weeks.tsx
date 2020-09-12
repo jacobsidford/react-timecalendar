@@ -1,48 +1,40 @@
-// @ts-nocheck
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import dateFns from 'date-fns';
-import DayTitle from './DayTitle';
-import Day from './Day';
+import React, { PureComponent } from "react";
+import dateFns from "date-fns";
+import DayTitle from "./DayTitle";
+import Day from "./Day";
+import { WeeksProps } from "./types";
 
-const propTypes = {
-  selectedDate: PropTypes.instanceOf(Date),
-  onDateClick: PropTypes.func,
-  clickable: PropTypes.bool,
-  disableHistory: PropTypes.bool,
-  startTime: PropTypes.string,
-  endTime: PropTypes.string,
-};
-
-const defaultProps = {
-  selectedDate: null,
-  onDateClick: null,
-  clickable: true,
-  disableHistory: true,
-  startTime: null,
-  endTime: null,
-};
-
-export default class Weeks extends PureComponent {
+export default class Weeks extends PureComponent<WeeksProps> {
   generateClasses(day) {
     const {
-      selectedDate, clickable, startTime, endTime, disableHistory,
+      selectedDate,
+      clickable,
+      startTime,
+      endTime,
+      disableHistory,
     } = this.props;
-    let classSet = '';
-    classSet += ` ${dateFns.format(day, 'ddd')}`;
-    classSet += dateFns.isToday(day) ? ' today' : '';
-    classSet += dateFns.isSameMonth(day, selectedDate) ? '' : ' disabled';
-    classSet += dateFns.isSameDay(day, selectedDate) ? ' selected' : '';
-    classSet += clickable ? '' : ' disabled';
-    classSet += dateFns.isWithinRange(day, startTime, endTime) ? ' selected' : '';
-    if (disableHistory)classSet += dateFns.isBefore(day, dateFns.endOfYesterday()) ? ' disabled' : '';
+    let classSet = "";
+    classSet += ` ${dateFns.format(day, "ddd")}`;
+    classSet += dateFns.isToday(day) ? " today" : "";
+    classSet += dateFns.isSameMonth(day, selectedDate) ? "" : " disabled";
+    classSet += dateFns.isSameDay(day, selectedDate) ? " selected" : "";
+    classSet += clickable ? "" : " disabled";
+    classSet += dateFns.isWithinRange(day, startTime, endTime)
+      ? " selected"
+      : "";
+    if (disableHistory)
+      classSet += dateFns.isBefore(day, dateFns.endOfYesterday())
+        ? " disabled"
+        : "";
 
     return classSet;
   }
 
   render() {
     const { selectedDate, onDateClick } = this.props;
-    const endDate = dateFns.endOfWeek(dateFns.endOfMonth(dateFns.startOfMonth(selectedDate)));
+    const endDate = dateFns.endOfWeek(
+      dateFns.endOfMonth(dateFns.startOfMonth(selectedDate))
+    );
     const rows = [];
     let days = [];
     let day = dateFns.startOfWeek(dateFns.startOfMonth(selectedDate));
@@ -54,17 +46,17 @@ export default class Weeks extends PureComponent {
         days.push(
           <Day
             classSet={classSet}
-            key={day}
-            date={dateFns.format(day, 'D')}
+            key={JSON.stringify(day)}
+            date={dateFns.format(day, "D")}
             onDateClick={() => onDateClick(cloneDay)}
-          />,
+          />
         );
         day = dateFns.addDays(day, 1);
       }
       rows.push(
-        <div className="row" key={day}>
+        <div className="row" key={JSON.stringify(day)}>
           {days}
-        </div>,
+        </div>
       );
       days = [];
     }
@@ -76,6 +68,3 @@ export default class Weeks extends PureComponent {
     );
   }
 }
-
-Weeks.propTypes = propTypes;
-Weeks.defaultProps = defaultProps;
