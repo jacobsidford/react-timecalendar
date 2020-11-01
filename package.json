@@ -26,8 +26,25 @@
 	},
 	"scripts": {
 		"build": "rollup -c",
-		"prepublish": "npm run build"
+		"prepublish": "npm run build",
+    "test": "jest"
 	},
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "setupFiles": [
+      "<rootDir>/src/__test__/setupTests.js"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "**/?(*.)+(spec|test).[t]s?(x)"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
 	"browserslist": [
 		">0.2%",
 		"not dead",
@@ -39,17 +56,24 @@
 		"react-dom": "^16.8.3"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^15.0.0",
-		"@rollup/plugin-node-resolve": "^9.0.0",
-		"@types/react": "^16.9.49",
-		"node-sass": "^4.14.1",
-		"react": "^16.8.3",
-		"react-dom": "^16.8.3",
-		"rollup": "^2.26.11",
-		"rollup-plugin-peer-deps-external": "^2.2.3",
-		"rollup-plugin-postcss": "^3.1.8",
-		"rollup-plugin-typescript2": "^0.27.2",
-		"tslib": "^2.0.3",
-		"typescript": "^4.0.2"
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@types/jest": "^26.0.15",
+    "@types/react": "^16.9.49",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
+    "jest": "^26.6.1",
+    "node-sass": "^4.14.1",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-test-renderer": "^17.0.1",
+    "rollup": "^2.26.11",
+    "rollup-plugin-peer-deps-external": "^2.2.3",
+    "rollup-plugin-postcss": "^3.1.8",
+    "rollup-plugin-typescript2": "^0.27.2",
+    "ts-jest": "^26.4.3",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.2"
 	}
 }
