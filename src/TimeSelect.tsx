@@ -92,7 +92,7 @@ export default class TimeSelect extends PureComponent<
             onTimeClick={() => onTimeClick(cloneTime)}
           />
         );
-        timePick = dateFns.addMinutes(timePick, 30);
+        timePick = dateFns.addMinutes(timePick, timeSlot);
       }
       rows.push(
         <div className="row" key={timePick}>
