@@ -51,6 +51,8 @@ export interface DayProps {
 
   export interface WeeksProps {
     selectedDate: Date,
+    bookings: Booking[],
+    timeslot: number;
     onDateClick: Function,
     clickable: boolean,
     disableHistory: boolean,

@@ -113,8 +113,10 @@ export default class TimeCalendar extends PureComponent<
               selectedDate={selectedDate}
               disableHistory={disableHistory}
               onDateClick={this.onDateClick}
+              bookings={bookings}
+              timeSlot={timeSlot}
               clickable={clickable}
-              startTime={startTime}
+              startTime={startTime} // Should change to selectedTime.start/end
               endTime={endTime}
             />
           </>

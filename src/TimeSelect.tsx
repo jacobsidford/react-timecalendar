@@ -10,11 +10,12 @@ export default class TimeSelect extends PureComponent<
   TimeSelectProps,
   TimeSelectState
 > {
-  constructor(props) {
+  constructor(props: TimeSelectProps) {
     super(props);
     this.state = { selectorClass: "inactive" };
     this.selectorClick = this.selectorClick.bind(this);
     this.generateOpenHours = this.generateOpenHours.bind(this);
+    this.isTimeDisabled = this.isTimeDisabled.bind(this);
   }
 
   selectorClick(): void {
@@ -47,6 +48,22 @@ export default class TimeSelect extends PureComponent<
     return openTimes;
   }
 
+  isTimeDisabled(time) {
+    const { bookings, disableHistory } = this.props;
+    if (disableHistory && dateFns.isBefore(time, new Date())) { 
+      return true
+    };
+  for (let f = 0; f < bookings.length; f += 1) {
+    if (dateFns.isWithinRange(
+      time,
+      bookings[f].start_time,
+      dateFns.subMinutes(bookings[f].end_time, 1)
+    )) {
+      return true
+    }
+   }
+  }
+
   render() {
     const {
       timeSlot,
@@ -72,17 +89,8 @@ export default class TimeSelect extends PureComponent<
         classSet += dateFns.isWithinRange(timePick, startTime, endTime)
           ? " selectedTime"
           : "";
-        if (disableHistory)
-          classSet += dateFns.isBefore(timePick, new Date()) ? " disabled" : "";
-        for (let f = 0; f < bookings.length; f += 1) {
-          classSet += dateFns.isWithinRange(
-            timePick,
-            bookings[f].start_time,
-            dateFns.subMinutes(bookings[f].end_time, 1)
-          )
-            ? " disabled"
-            : "";
-        }
+          classSet += this.isTimeDisabled(timePick);
+
         const cloneTime = timePick;
         timeSlots.push(
           <TimeSlot
