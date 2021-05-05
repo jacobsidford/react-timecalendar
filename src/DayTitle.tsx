@@ -10,7 +10,7 @@ export default class DayTitle extends React.Component<
   DayTitleProps,
   DayTitleState
 > {
-  constructor(props) {
+  constructor(props: DayTitleProps) {
     super(props);
     this.state = {
       dateFormat: "ddd",

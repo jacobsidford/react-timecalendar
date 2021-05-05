@@ -28,7 +28,7 @@ export default class TimeCalendar extends PureComponent<
     this.timeSelectToggle = this.timeSelectToggle.bind(this);
   }
 
-  onDateClick(day) {
+  onDateClick(day: Date) {
     const { onDateFunction } = this.props;
     this.setState({
       selectedDate: day,
@@ -103,8 +103,7 @@ export default class TimeCalendar extends PureComponent<
               openHours={openHours}
               onTimeClick={onTimeClick}
               bookings={bookings}
-              startTime={startTime}
-              endTime={endTime}
+              selectedTime={{start: startTime, end: endTime}}
             />
           </>
         ) : (
@@ -113,9 +112,10 @@ export default class TimeCalendar extends PureComponent<
               selectedDate={selectedDate}
               disableHistory={disableHistory}
               onDateClick={this.onDateClick}
+              bookings={bookings}
+              timeSlot={timeSlot}
               clickable={clickable}
-              startTime={startTime}
-              endTime={endTime}
+              selectedTime={{start: startTime, end: endTime}}
             />
           </>
         )}

@@ -1,5 +1,7 @@
+//@ts-nocheck
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TimeSlotProps } from './types';
 
 const propTypes = {
   classSet: PropTypes.string,
@@ -13,7 +15,7 @@ const defaultProps = {
   onTimeClick: null,
 };
 
-function TimeSlot(props) {
+function TimeSlot(props: TimeSlotProps) {
   const { classSet, onTimeClick, time } = props;
   return (
     <div

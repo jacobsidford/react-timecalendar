@@ -4,6 +4,11 @@ export type Booking = {
     end_time: Date,
 }
 
+export type SelectedTime = {
+  start: string,
+  end: string
+}
+
 export interface DayProps {
     classSet: string,
     date: string,
@@ -28,8 +33,7 @@ export interface DayProps {
     timeSlot: number,
     onDateFunction: Function,
     onTimeClick: Function,
-    startTime: string,
-    endTime: string
+    selectedTime: SelectedTime
   }
 
   export interface TimeSelectProps {
@@ -39,8 +43,7 @@ export interface DayProps {
     openHours: number[][],
     onTimeClick: Function,
     bookings: Booking[],
-    startTime: string,
-    endTime: string,
+    selectedTime: SelectedTime
   }
 
   export interface TimeSlotProps {
@@ -51,9 +54,10 @@ export interface DayProps {
 
   export interface WeeksProps {
     selectedDate: Date,
+    bookings: Booking[],
+    timeslot: number;
     onDateClick: Function,
     clickable: boolean,
     disableHistory: boolean,
-    startTime: string,
-    endTime: string
+    selectedTime: SelectedTime
   }

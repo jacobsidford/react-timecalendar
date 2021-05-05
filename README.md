@@ -14,24 +14,21 @@ Ideal for building a booking system in React.
 - [Booked Timeslots](#booked-timeslots)
 - [Open CSS for styling](#styling)
 
-## Try it out
-
-```bash
-$ git clone https://github.com/jacobsidford/react-timecalendar.git
-$ cd react-TimeCalendar
-$ npm install
-$ npm start
-```
-
-Server will start on http://localhost:3000/
-
-Online version available at https://jacobsidford.github.io/react-timecalendar/
-
 ## Installing / Getting started
 
 ```bash
 npm install --save react-timecalendar
 ```
+
+## Try it out
+
+```bash
+$ git clone https://github.com/jacobsidford/react-timecalendar.git
+$ cd react-timecalendar
+$ npm install
+```
+
+Online demo available at https://jacobsidford.github.io/react-timecalendar/
 
 ## Usage
 
@@ -63,7 +60,6 @@ const MyCalendar = () => (
 | :--------------- | :------- | :------ | :----------------------------------------------------- |
 | `disableHistory` | bool     | `true`  | Disable navigating before current month.               |
 | `clickable`      | bool     | `true`  | Make days clickable.                                   |
-| `localTz`        | bool     | `true`  | TODO:Converts provided booking times to local timezone |
 | `openHours`      | array    | `[][]`  | Times slots that will be rendered available.           |
 | `timeSlot`       | number   | 30      | Amount of time needed for each booking.                |
 | `onDateFunction` | function | null    | Function called on click of calendar day, returns day  |
@@ -149,7 +145,7 @@ SCSS class taxonomy:
 Standard calendar for selecting a date. onDateClick returns the selected date object.
 
 ```js
-<TimeCalendar clickable onDateClick={this.handleDateClick} />
+<TimeCalendar clickable onDateClick={this.onDateFunction} />
 ```
 
 #### Time Selector
@@ -267,12 +263,8 @@ render () {
 
 ### TODO:
 
-- [ ] Bookings also disable days if timeslots not available
-- [ ] Closed message when no time slots available for that day
+- [ ] Can select multiple days for booking if no timeslot
 - [ ] Allow onClick URL's in bookings displayed on calendar
-- [ ] Potentially make time selection appear as a modal/dialog for better UX
-- [ ] Improvements to typescript typing
-<!-- - [ ] Local timezone conversion option -->
 
 ## Dependencies
 
