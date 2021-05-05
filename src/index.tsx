@@ -28,7 +28,7 @@ export default class TimeCalendar extends PureComponent<
     this.timeSelectToggle = this.timeSelectToggle.bind(this);
   }
 
-  onDateClick(day) {
+  onDateClick(day: Date) {
     const { onDateFunction } = this.props;
     this.setState({
       selectedDate: day,
