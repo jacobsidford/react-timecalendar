@@ -103,8 +103,7 @@ export default class TimeCalendar extends PureComponent<
               openHours={openHours}
               onTimeClick={onTimeClick}
               bookings={bookings}
-              startTime={startTime}
-              endTime={endTime}
+              selectedTime={{start: startTime, end: endTime}}
             />
           </>
         ) : (
@@ -116,8 +115,7 @@ export default class TimeCalendar extends PureComponent<
               bookings={bookings}
               timeSlot={timeSlot}
               clickable={clickable}
-              startTime={startTime} // Should change to selectedTime.start/end
-              endTime={endTime}
+              selectedTime={{start: startTime, end: endTime}}
             />
           </>
         )}

@@ -25,7 +25,7 @@ export default class TimeSelect extends PureComponent<
     });
   }
 
-  generateOpenHours() {
+  generateOpenHours(): Date[] {
     const openTimes = [];
     const { openHours, selectedDate } = this.props;
     const dayStart = dateFns.startOfDay(selectedDate);
@@ -48,29 +48,27 @@ export default class TimeSelect extends PureComponent<
     return openTimes;
   }
 
-  isTimeDisabled(time: Date) {
+  isTimeDisabled(time: Date, openHours: Date[]) {
     const { bookings, disableHistory } = this.props;
-    if (disableHistory && dateFns.isBefore(time, new Date())) { 
+    if (disableHistory && dateFns.isBefore(time, new Date()) || !dateFns.isBefore(time, openHours[1])) { 
       return true
     };
-  for (let f = 0; f < bookings.length; f += 1) {
-    if (dateFns.isWithinRange(
-      time,
-      bookings[f].start_time,
-      dateFns.subMinutes(bookings[f].end_time, 1)
-    )) {
-      return true
+
+    for (let f = 0; f < bookings.length; f += 1) {
+      if (dateFns.isWithinRange(
+        time,
+        bookings[f].start_time,
+        dateFns.subMinutes(bookings[f].end_time, 1)
+      )) {
+        return true
+      }
     }
-   }
   }
 
   render() {
     const {
       timeSlot,
-      startTime,
-      endTime,
-      bookings,
-      disableHistory,
+      selectedTime,
       onTimeClick,
     } = this.props;
     const { selectorClass } = this.state;
@@ -86,10 +84,10 @@ export default class TimeSelect extends PureComponent<
       for (let i = 0; i < 4; i += 1) {
         let classSet = '';
         classSet += dateFns.isBefore(timePick, openHours[1]) ? "" : " disabled";
-        classSet += dateFns.isWithinRange(timePick, startTime, endTime)
+        classSet += dateFns.isWithinRange(timePick, selectedTime.start, selectedTime.end)
           ? " selectedTime"
           : "";
-          classSet += this.isTimeDisabled(timePick);
+          classSet += this.isTimeDisabled(timePick, openHours) ? " disabled" : "";
 
         const cloneTime = timePick;
         timeSlots.push(

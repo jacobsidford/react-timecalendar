@@ -263,12 +263,8 @@ render () {
 
 ### TODO:
 
-- [ ] Bookings also disable days if timeslots not available
-- [ ] Closed message when no time slots available for that day
+- [ ] Can select multiple days for booking if no timeslot
 - [ ] Allow onClick URL's in bookings displayed on calendar
-- [ ] Potentially make time selection appear as a modal/dialog for better UX
-- [ ] Improvements to typescript typing
-<!-- - [ ] Local timezone conversion option -->
 
 ## Dependencies
 

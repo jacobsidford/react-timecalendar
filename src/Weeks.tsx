@@ -16,9 +16,9 @@ export default class Weeks extends PureComponent<WeeksProps> {
   }
 
   isDaySelected(day: Date) {
-    const { selectedDate, startTime, endTime } = this.props;
-    if(dateFns.isSameDay(day, selectedDate) || dateFns.isWithinRange(day, startTime, endTime)) {
-      return true;
+    const { selectedDate, selectedTime } = this.props;
+    if(dateFns.isSameDay(day, selectedDate) || dateFns.isWithinRange(day, selectedTime.start, selectedTime.end)) {
+    return true;
     } 
   }
 
