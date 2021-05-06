@@ -1,6 +1,6 @@
 {
 	"name": "react-timecalendar",
-	"version": "2.1.2",
+	"version": "2.1.3",
 	"description": "Lightweight React calendar with time options for booking",
 	"main": "build/index.js",
 	"module": "build/index.es.js",
