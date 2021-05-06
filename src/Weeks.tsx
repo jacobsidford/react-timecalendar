@@ -23,12 +23,12 @@ export default class Weeks extends PureComponent<WeeksProps> {
   }
 
   isdayDisabled(day: Date) {
-    const { clickable, disableHistory, selectedDate, timeslot } = this.props;
+    const { clickable, disableHistory, selectedDate, timeSlot } = this.props;
     if (!clickable || (disableHistory && dateFns.isBefore(day, dateFns.endOfYesterday())) || !dateFns.isSameMonth(day, selectedDate)) { 
       return true
     };
 
-    if(!timeslot && this.isBetweenBookings(day)) {
+    if(!timeSlot && this.isBetweenBookings(day)) {
       return true;
     }
   }
