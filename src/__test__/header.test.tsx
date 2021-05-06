@@ -3,9 +3,10 @@ import { shallow, mount, render } from "enzyme";
 import Header from "../Header";
 
 describe('Header', () => {
+  const mockDate = new Date('2020-10-05T12:00:00.000Z').toString();
     const mockHeader = shallow(
       <Header
-        selectedDate={new Date('2020-10-05T12:00:00.000Z').toString()}
+        selectedDate={mockDate}
         nextTime={jest.fn()}
         prevTime={jest.fn()}
       />
@@ -16,6 +17,6 @@ describe('Header', () => {
 
     it("should render correctly", () => {
         const value = mockHeader.find("span").text()
-        expect(value).toEqual(new Date('2020-10-05T12:00:00.000Z').toString());
+        expect(value).toEqual(mockDate);
       });
 })
