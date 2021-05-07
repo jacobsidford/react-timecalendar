@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should render correctly for snapshot 1`] = `ShallowWrapper {}`;
+
+exports[`Weeks should render correctly for snapshot 1`] = `ShallowWrapper {}`;
+
+exports[`Weeks should render correctly for snapshot 2`] = `ShallowWrapper {}`;
+
+exports[`should render correctly 1`] = `ShallowWrapper {}`;
