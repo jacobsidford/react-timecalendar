@@ -17,15 +17,11 @@ Ideal for building a booking system in React.
 ## Installing / Getting started
 
 ```bash
-npm install --save react-timecalendar
-```
+npm install react-timecalendar
 
-## Try it out
+or
 
-```bash
-$ git clone https://github.com/jacobsidford/react-timecalendar.git
-$ cd react-timecalendar
-$ npm install
+$ yarn add react-timecalendar
 ```
 
 Online demo available at https://jacobsidford.github.io/react-timecalendar/
