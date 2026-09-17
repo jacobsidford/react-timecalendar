@@ -20,12 +20,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
-      # Trusted publishing needs npm >= 11.5.1; Node 20 bundles 10.x.
-      # No registry-url on setup-node: it injects a placeholder NODE_AUTH_TOKEN
-      # that overrides the OIDC exchange and the registry answers 404.
-      - run: npm install -g npm@latest
+      # Trusted publishing needs npm >= 11.5.1. npm 12 requires Node 22+, so
+      # pin the 11 line. No registry-url on setup-node: it injects a placeholder
+      # NODE_AUTH_TOKEN that overrides the OIDC exchange and the registry answers 404.
+      - run: npm install -g npm@11
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
