@@ -2,9 +2,15 @@
 
 [![CI](https://github.com/jacobsidford/react-timecalendar/actions/workflows/ci.yml/badge.svg)](https://github.com/jacobsidford/react-timecalendar/actions/workflows/ci.yml)
 [![npm](https://img.shields.io/npm/v/react-timecalendar)](https://www.npmjs.com/package/react-timecalendar)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/react-timecalendar)](https://bundlephobia.com/package/react-timecalendar)
+[![license](https://img.shields.io/npm/l/react-timecalendar)](./LICENSE)
 
-Lightweight and customizable date/time picker for react.js, simply pass in a callback function to receive selected date, time or time periods of both.
-Ideal for building a booking system in React.
+Lightweight, typed date and time-slot picker for React. Pass in opening hours and existing bookings, get back the `Date` the user picked. Built for booking and appointment UIs.
+
+- ~6 KB minified on top of [date-fns](https://date-fns.org) v4 (tree-shaken, shared with your app)
+- TypeScript types included, ESM and CJS builds
+- React 16.8 → 19, no other runtime dependencies
+- Plain SCSS classes, no CSS-in-JS
 ![Demo: pick a day, switch to time view, select a range around a booking](./public/images/demo.gif?raw=true "react-timecalendar demo")
 
 ## Features
@@ -18,36 +24,37 @@ Ideal for building a booking system in React.
 ## Installing / Getting started
 
 ```bash
-npm install react-timecalendar
-# or
-yarn add react-timecalendar
+npm install react-timecalendar date-fns
 ```
+
+`date-fns` v4 is a peer-style dependency: it is declared in `dependencies` so a bare install works, but if your app already uses date-fns v3 or v4 npm will dedupe to a single copy.
 
 Online demo available at https://jacobsidford.github.io/react-timecalendar/
 
 ## Usage
 
-```js
-import React from "react";
+```tsx
 import TimeCalendar from "react-timecalendar";
+// or: import { TimeCalendar } from "react-timecalendar";
 
 const openHours = [
-  [9.5, 15],
-  [9, 23.5],
+  [9.5, 15], // weekdays 09:30–15:00
+  [9, 23.5], // weekends 09:00–23:30
 ];
-function loggingTime(time) {
-  console.log(time);
+
+export function MyCalendar() {
+  return (
+    <TimeCalendar
+      timeSlot={30}
+      openHours={openHours}
+      onDateClick={(day: Date) => console.log("day", day)}
+      onTimeClick={(time: Date) => console.log("slot", time)}
+    />
+  );
 }
-const MyCalendar = () => (
-  <TimeCalendar
-    disableHistory
-    clickable
-    timeSlot={30}
-    openHours={openHours}
-    onTimeClick={loggingTime}
-  />
-);
 ```
+
+Styles are injected automatically on import; no separate CSS file to include.
 
 ## Options
 
@@ -219,7 +226,7 @@ Calendar can receive an array of bookings and will then add `.disabled` to slots
 that overlap a booking are disabled instead. The component does not stop a multi-selection
 spanning a booking; see `demo/main.tsx` for a `handleTimeClick` that resets when it does.
 
-Booking times can be `Date` objects or anything date-fns v1 can parse. If in doubt, use `Date`.
+Booking times can be `Date` objects, epoch milliseconds, or ISO-8601 strings (`"2030-03-27 13:00:00"` and `"2030-03-27T13:00:00Z"` both parse). If in doubt, use `Date`.
 Note `disableHistory` (default `true`) hides past dates, so bookings in the past never show.
 
 ```js
@@ -272,9 +279,20 @@ npm run build:demo  # demo site → dist-demo/
 
 The demo deploys to GitHub Pages automatically on every push to `master`.
 
+## Upgrading from 2.x
+
+3.0.0 moves from date-fns v1 to v4 and stops bundling it.
+
+- Install `date-fns` alongside (`npm install date-fns`). If you were relying on the copy bundled inside 2.x, it is gone.
+- `bookings`, `startTime` and `endTime` still accept strings, but they must now be ISO-8601. Free-form strings that date-fns v1 happened to parse (e.g. `"March 27 2030"`) are not supported.
+- Bundle drops from ~190 KB to ~12 KB before minification.
+- The component is also available as a named export.
+
+Everything else in the props table is unchanged from 2.2.
+
 ## Dependencies
 
-[date-fns](https://github.com/date-fns/date-fns) v1
+[date-fns](https://github.com/date-fns/date-fns) v4
 
 ## Licensing
 

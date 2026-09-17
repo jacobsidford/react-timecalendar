@@ -1,5 +1,5 @@
 import React from "react";
-import dateFns from "date-fns";
+import { addDays, format, startOfWeek } from "date-fns";
 import { DayTitleProps } from "./types";
 
 type DayTitleState = {
@@ -15,14 +15,14 @@ export default class DayTitle extends React.Component<
   constructor(props: DayTitleProps) {
     super(props);
     this.state = {
-      dateFormat: "ddd",
+      dateFormat: "EEE",
     };
   }
 
   componentDidMount() {
     const parent = this.dayTitle?.parentElement;
     this.setState({
-      dateFormat: parent && parent.clientWidth > 500 ? "dddd" : "ddd",
+      dateFormat: parent && parent.clientWidth > 500 ? "EEEE" : "EEE",
     });
   }
 
@@ -30,11 +30,11 @@ export default class DayTitle extends React.Component<
     const { currentMonth } = this.props;
     const { dateFormat } = this.state;
     const days = [];
-    const startDate = dateFns.startOfWeek(currentMonth);
+    const startDate = startOfWeek(currentMonth);
     for (let i = 0; i < 7; i += 1) {
       days.push(
         <div className="col col-center" key={i}>
-          {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+          {format(addDays(startDate, i), dateFormat)}
         </div>
       );
     }

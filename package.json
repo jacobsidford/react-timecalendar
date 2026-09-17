@@ -1,6 +1,6 @@
 {
 	"name": "react-timecalendar",
-	"version": "2.2.0",
+	"version": "3.0.0",
 	"description": "Lightweight React calendar with time options for booking",
 	"main": "build/index.js",
 	"module": "build/index.es.js",
@@ -9,23 +9,30 @@
 		"email": "jacob.sidford@gmail.com"
 	},
 	"files": [
-		"build"
+		"build",
+		"LICENSE",
+		"README.md"
 	],
 	"homepage": "https://jacobsidford.github.io/react-timecalendar/",
 	"license": "MIT",
 	"repository": "https://github.com/jacobsidford/react-timecalendar/",
 	"keywords": [
 		"react",
-		"reactjs",
 		"react-component",
-		"bookings",
-		"calendar"
+		"calendar",
+		"date-picker",
+		"time-picker",
+		"timeslot",
+		"booking",
+		"appointment",
+		"scheduler",
+		"typescript"
 	],
 	"dependencies": {
-		"date-fns": "^1.30.1"
+		"date-fns": "^4.1.0"
 	},
 	"scripts": {
-		"build": "rollup -c",
+		"build": "rm -rf build && rollup -c",
 		"dev": "vite",
 		"build:demo": "vite build",
 		"preview": "vite preview",
@@ -65,5 +72,17 @@
 		"vite": "^5.1.6",
 		"vitest": "^1.4.0"
 	},
-	"types": "build/index.d.ts"
+	"types": "build/index.d.ts",
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./build/index.d.ts",
+			"import": "./build/index.es.js",
+			"require": "./build/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"engines": {
+		"node": ">=18"
+	}
 }

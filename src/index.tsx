@@ -1,5 +1,14 @@
 import React, { PureComponent } from "react";
-import dateFns from "date-fns";
+import {
+  addDays,
+  addMonths,
+  format,
+  isPast,
+  startOfDay,
+  startOfMonth,
+  subDays,
+  subMonths,
+} from "date-fns";
 import Header from "./Header";
 import Weeks from "./Weeks";
 import TimeSelect from "./TimeSelect";
@@ -20,7 +29,7 @@ type TimeCalendarState = {
 
 const noop = () => {};
 
-export default class TimeCalendar extends PureComponent<
+export class TimeCalendar extends PureComponent<
   TimeCalendarProps,
   TimeCalendarState
 > {
@@ -56,8 +65,8 @@ export default class TimeCalendar extends PureComponent<
     const { selectedDate, timeSelect } = this.state;
     this.setState({
       selectedDate: timeSelect
-        ? dateFns.addDays(selectedDate, 1)
-        : dateFns.addMonths(selectedDate, 1),
+        ? addDays(selectedDate, 1)
+        : addMonths(selectedDate, 1),
     });
   }
 
@@ -67,16 +76,16 @@ export default class TimeCalendar extends PureComponent<
 
     if (
       disableHistory &&
-      ((!timeSelect && dateFns.isPast(dateFns.startOfMonth(selectedDate))) ||
-        (timeSelect && dateFns.isPast(dateFns.startOfDay(selectedDate))))
+      ((!timeSelect && isPast(startOfMonth(selectedDate))) ||
+        (timeSelect && isPast(startOfDay(selectedDate))))
     ) {
       return;
     }
 
     this.setState({
       selectedDate: timeSelect
-        ? dateFns.subDays(selectedDate, 1)
-        : dateFns.subMonths(selectedDate, 1),
+        ? subDays(selectedDate, 1)
+        : subMonths(selectedDate, 1),
     });
   }
 
@@ -104,8 +113,8 @@ export default class TimeCalendar extends PureComponent<
         <Header
           selectedDate={
             timeSelect
-              ? dateFns.format(selectedDate, "dddd Do MMMM")
-              : dateFns.format(selectedDate, "MMMM YYYY")
+              ? format(selectedDate, "EEEE do MMMM")
+              : format(selectedDate, "MMMM yyyy")
           }
           nextTime={this.nextTime}
           prevTime={this.prevTime}
@@ -144,3 +153,5 @@ export default class TimeCalendar extends PureComponent<
     );
   }
 }
+
+export default TimeCalendar;

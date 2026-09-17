@@ -1,21 +1,30 @@
 import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
-import dateFns from "date-fns";
+import {
+  addDays,
+  format,
+  isSameDay,
+  isWithinInterval,
+  setHours,
+  setMinutes,
+  startOfDay,
+  subMinutes,
+} from "date-fns";
 import TimeCalendar, { Booking } from "../src";
 
 // Bookings are pinned to tomorrow so the demo always shows blocked slots
 // regardless of when you open it.
-const tomorrow = dateFns.startOfDay(dateFns.addDays(new Date(), 1));
+const tomorrow = startOfDay(addDays(new Date(), 1));
 const bookings: Booking[] = [
   {
     id: 1,
-    start_time: dateFns.setHours(tomorrow, 13),
-    end_time: dateFns.setMinutes(dateFns.setHours(tomorrow, 13), 30),
+    start_time: setHours(tomorrow, 13),
+    end_time: setMinutes(setHours(tomorrow, 13), 30),
   },
   {
     id: 2,
-    start_time: dateFns.setHours(tomorrow, 14),
-    end_time: dateFns.setMinutes(dateFns.setHours(tomorrow, 15), 30),
+    start_time: setHours(tomorrow, 14),
+    end_time: setMinutes(setHours(tomorrow, 15), 30),
   },
 ];
 
@@ -25,10 +34,11 @@ const openHours = [
 ];
 
 function overlapsBooking(start: Date, end: Date): boolean {
+  const interval = { start, end };
   return bookings.some(
     (b) =>
-      dateFns.isWithinRange(b.start_time, start, end) ||
-      dateFns.isWithinRange(dateFns.subMinutes(b.end_time, 1), start, end)
+      isWithinInterval(b.start_time as Date, interval) ||
+      isWithinInterval(subMinutes(b.end_time as Date, 1), interval)
   );
 }
 
@@ -43,7 +53,7 @@ function Demo() {
       return;
     }
     const restart =
-      !dateFns.isSameDay(startTime, time) ||
+      !isSameDay(startTime, time) ||
       time < startTime ||
       overlapsBooking(startTime, time);
     if (restart) {
@@ -54,7 +64,7 @@ function Demo() {
     setEndTime(time);
   }
 
-  const fmt = (d: Date | "") => (d === "" ? "—" : dateFns.format(d, "ddd D MMM HH:mm"));
+  const fmt = (d: Date | "") => (d === "" ? "—" : format(d, "EEE d MMM HH:mm"));
 
   return (
     <>
@@ -77,7 +87,7 @@ function Demo() {
         onTimeClick={handleTimeClick}
       />
       <div className="status">
-        Day: <code>{lastDay ? dateFns.format(lastDay, "ddd D MMM YYYY") : "—"}</code>{" "}
+        Day: <code>{lastDay ? format(lastDay, "EEE d MMM yyyy") : "—"}</code>{" "}
         Start: <code>{fmt(startTime)}</code> End: <code>{fmt(endTime)}</code>
       </div>
     </>

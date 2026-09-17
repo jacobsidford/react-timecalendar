@@ -1,8 +1,19 @@
 import React, { PureComponent } from "react";
-import dateFns from "date-fns";
+import {
+  addHours,
+  addMinutes,
+  differenceInMinutes,
+  format,
+  getDay,
+  isBefore,
+  isWithinInterval,
+  startOfDay,
+  subMinutes,
+} from "date-fns";
 import TimeSlot from "./TimeSlot";
 import { TimeSelectProps } from "./types";
 import { isWithinSelection } from "./selection";
+import { toDateValue } from "./dates";
 
 const SLOTS_PER_ROW = 4;
 
@@ -10,8 +21,8 @@ export default class TimeSelect extends PureComponent<TimeSelectProps> {
   /** Resolve [open, close] Dates for the selected day from the openHours prop. */
   generateOpenHours(): [Date, Date] | null {
     const { openHours, selectedDate } = this.props;
-    const dayStart = dateFns.startOfDay(selectedDate);
-    const dayOfWeek = dateFns.getDay(selectedDate);
+    const dayStart = startOfDay(selectedDate);
+    const dayOfWeek = getDay(selectedDate);
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
     let hours: number[] | undefined;
@@ -25,23 +36,21 @@ export default class TimeSelect extends PureComponent<TimeSelectProps> {
     if (!hours || hours.length < 2) return null;
 
     return [
-      dateFns.addHours(dayStart, hours[0]),
-      dateFns.addHours(dayStart, hours[1]),
+      addHours(dayStart, hours[0]),
+      addHours(dayStart, hours[1]),
     ];
   }
 
   isTimeDisabled(time: Date, close: Date): boolean {
     const { bookings, disableHistory } = this.props;
-    if (disableHistory && dateFns.isBefore(time, new Date())) return true;
-    if (!dateFns.isBefore(time, close)) return true;
+    if (disableHistory && isBefore(time, new Date())) return true;
+    if (!isBefore(time, close)) return true;
 
-    return bookings.some((booking) =>
-      dateFns.isWithinRange(
-        time,
-        booking.start_time,
-        dateFns.subMinutes(booking.end_time, 1)
-      )
-    );
+    return bookings.some((booking) => {
+      const start = toDateValue(booking.start_time);
+      const end = subMinutes(toDateValue(booking.end_time), 1);
+      return start <= end && isWithinInterval(time, { start, end });
+    });
   }
 
   render() {
@@ -52,9 +61,9 @@ export default class TimeSelect extends PureComponent<TimeSelectProps> {
     if (openHours && timeSlot > 0) {
       const [open, close] = openHours;
       // Pad the last row out to a full row of slots; the padding renders disabled.
-      const slotCount = dateFns.differenceInMinutes(close, open) / timeSlot;
+      const slotCount = differenceInMinutes(close, open) / timeSlot;
       const padding = (SLOTS_PER_ROW - (slotCount % SLOTS_PER_ROW)) % SLOTS_PER_ROW;
-      const last = dateFns.addMinutes(close, timeSlot * padding);
+      const last = addMinutes(close, timeSlot * padding);
 
       let timePick = open;
       let timeSlots: React.ReactNode[] = [];
@@ -68,12 +77,12 @@ export default class TimeSelect extends PureComponent<TimeSelectProps> {
           timeSlots.push(
             <TimeSlot
               key={cloneTime.toISOString()}
-              time={dateFns.format(cloneTime, "HH:mm")}
+              time={format(cloneTime, "HH:mm")}
               classSet={classSet}
               onTimeClick={() => onTimeClick(cloneTime)}
             />
           );
-          timePick = dateFns.addMinutes(timePick, timeSlot);
+          timePick = addMinutes(timePick, timeSlot);
         }
         rows.push(
           <div className="row" key={timePick.toISOString()}>
