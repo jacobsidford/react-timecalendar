@@ -1,21 +1,29 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import dateFns from "date-fns";
+import {
+  addDays,
+  format,
+  isSameDay,
+  isSameMonth,
+  setHours,
+  setMinutes,
+  startOfDay,
+} from "date-fns";
 import TimeCalendar from "../index";
 
-const tomorrow = dateFns.startOfDay(dateFns.addDays(new Date(), 1));
+const tomorrow = startOfDay(addDays(new Date(), 1));
 const openHours = [[9, 12]];
 
 function goToTomorrow() {
   // If tomorrow is in the next month, move the calendar forward first.
-  if (!dateFns.isSameMonth(tomorrow, new Date())) {
+  if (!isSameMonth(tomorrow, new Date())) {
     fireEvent.click(screen.getByLabelText("Next"));
   }
   const dayCells = screen
     .getAllByRole("gridcell")
     .filter((c) => !c.className.includes("disabled"));
   const cell = dayCells.find(
-    (c) => c.querySelector(".number")?.textContent === dateFns.format(tomorrow, "D")
+    (c) => c.querySelector(".number")?.textContent === format(tomorrow, "d")
   );
   if (!cell) throw new Error("tomorrow not rendered");
   fireEvent.click(cell);
@@ -24,7 +32,7 @@ function goToTomorrow() {
 describe("TimeCalendar", () => {
   it("renders the current month and hides the time toggle without openHours", () => {
     render(<TimeCalendar />);
-    expect(screen.getByText(dateFns.format(new Date(), "MMMM YYYY"))).toBeInTheDocument();
+    expect(screen.getByText(format(new Date(), "MMMM yyyy"))).toBeInTheDocument();
     expect(screen.queryByText("Select Time")).not.toBeInTheDocument();
   });
 
@@ -33,7 +41,7 @@ describe("TimeCalendar", () => {
     render(<TimeCalendar onDateClick={onDateClick} openHours={openHours} />);
     goToTomorrow();
     expect(onDateClick).toHaveBeenCalledTimes(1);
-    expect(dateFns.isSameDay(onDateClick.mock.calls[0][0], tomorrow)).toBe(true);
+    expect(isSameDay(onDateClick.mock.calls[0][0], tomorrow)).toBe(true);
   });
 
   it("still honours the deprecated onDateFunction prop", () => {
@@ -48,8 +56,8 @@ describe("TimeCalendar", () => {
     const bookings = [
       {
         id: 1,
-        start_time: dateFns.setHours(tomorrow, 10),
-        end_time: dateFns.setHours(tomorrow, 11),
+        start_time: setHours(tomorrow, 10),
+        end_time: setHours(tomorrow, 11),
       },
     ];
     render(
@@ -73,12 +81,12 @@ describe("TimeCalendar", () => {
 
     fireEvent.click(slot("09:30"));
     expect(onTimeClick).toHaveBeenCalledTimes(1);
-    expect(dateFns.format(onTimeClick.mock.calls[0][0], "HH:mm")).toBe("09:30");
+    expect(format(onTimeClick.mock.calls[0][0], "HH:mm")).toBe("09:30");
   });
 
   it("highlights the selected range and ignores a half-complete one", () => {
-    const start = dateFns.setMinutes(dateFns.setHours(tomorrow, 9), 30);
-    const end = dateFns.setMinutes(dateFns.setHours(tomorrow, 10), 30);
+    const start = setMinutes(setHours(tomorrow, 9), 30);
+    const end = setMinutes(setHours(tomorrow, 10), 30);
     const { rerender } = render(
       <TimeCalendar openHours={openHours} startTime={start} endTime="" />
     );

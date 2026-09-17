@@ -1,15 +1,31 @@
 import React, { PureComponent } from "react";
-import dateFns from "date-fns";
+import {
+  addDays,
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  endOfYesterday,
+  format,
+  isBefore,
+  isSameDay,
+  isSameMonth,
+  isToday,
+  isWithinInterval,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from "date-fns";
 import DayTitle from "./DayTitle";
 import Day from "./Day";
 import { WeeksProps } from "./types";
 import { isWithinSelection } from "./selection";
+import { toDateValue } from "./dates";
 
 export default class Weeks extends PureComponent<WeeksProps> {
   generateClasses(day: Date) {
     let classSet = "";
-    classSet += ` ${dateFns.format(day, "ddd")}`;
-    classSet += dateFns.isToday(day) ? " today" : "";
+    classSet += ` ${format(day, "EEE")}`;
+    classSet += isToday(day) ? " today" : "";
     classSet += this.isDaySelected(day) ? " selected" : "";
     classSet += this.isDayDisabled(day) ? " disabled" : "";
 
@@ -18,18 +34,15 @@ export default class Weeks extends PureComponent<WeeksProps> {
 
   isDaySelected(day: Date): boolean {
     const { selectedDate, selectedTime } = this.props;
-    return (
-      dateFns.isSameDay(day, selectedDate) ||
-      isWithinSelection(day, selectedTime)
-    );
+    return isSameDay(day, selectedDate) || isWithinSelection(day, selectedTime);
   }
 
   isDayDisabled(day: Date): boolean {
     const { clickable, disableHistory, selectedDate, timeSlot } = this.props;
     if (
       !clickable ||
-      (disableHistory && dateFns.isBefore(day, dateFns.endOfYesterday())) ||
-      !dateFns.isSameMonth(day, selectedDate)
+      (disableHistory && isBefore(day, endOfYesterday())) ||
+      !isSameMonth(day, selectedDate)
     ) {
       return true;
     }
@@ -38,21 +51,19 @@ export default class Weeks extends PureComponent<WeeksProps> {
 
   isBetweenBookings(day: Date): boolean {
     const { bookings } = this.props;
-    return bookings.some((booking) =>
-      dateFns.isWithinRange(
-        day,
-        dateFns.startOfDay(booking.start_time),
-        dateFns.endOfDay(booking.end_time)
-      )
-    );
+    return bookings.some((booking) => {
+      const start = startOfDay(toDateValue(booking.start_time));
+      const end = endOfDay(toDateValue(booking.end_time));
+      return start <= end && isWithinInterval(day, { start, end });
+    });
   }
 
   render() {
     const { selectedDate, onDateClick } = this.props;
-    const endDate = dateFns.endOfWeek(dateFns.endOfMonth(selectedDate));
+    const endDate = endOfWeek(endOfMonth(selectedDate));
     const rows = [];
     let days = [];
-    let day = dateFns.startOfWeek(dateFns.startOfMonth(selectedDate));
+    let day = startOfWeek(startOfMonth(selectedDate));
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i += 1) {
@@ -62,11 +73,11 @@ export default class Weeks extends PureComponent<WeeksProps> {
           <Day
             classSet={classSet}
             key={day.toISOString()}
-            date={dateFns.format(day, "D")}
+            date={format(day, "d")}
             onDateClick={() => onDateClick(cloneDay)}
           />
         );
-        day = dateFns.addDays(day, 1);
+        day = addDays(day, 1);
       }
       rows.push(
         <div className="row" key={day.toISOString()}>

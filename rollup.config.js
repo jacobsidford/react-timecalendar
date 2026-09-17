@@ -8,12 +8,13 @@ const packageJson = require("./package.json");
 
 export default {
   input: "src/index.tsx",
+  external: [/^date-fns/],
   output: [
     {
       file: packageJson.main,
       format: "cjs",
       sourcemap: true,
-      exports: "default",
+      exports: "named",
     },
     {
       file: packageJson.module,
@@ -26,10 +27,9 @@ export default {
     resolve(),
     commonjs(),
     typescript({
-      tsconfig: "./tsconfig.json",
+      tsconfig: "./tsconfig.build.json",
       declaration: true,
       declarationDir: "build",
-      exclude: ["**/*.test.tsx", "**/*.test.ts", "public/**", "vite.config.ts"],
     }),
     postcss({ use: [["sass", { silenceDeprecations: ["legacy-js-api"] }]] }),
   ],
