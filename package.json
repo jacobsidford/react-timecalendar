@@ -15,7 +15,10 @@
 	],
 	"homepage": "https://jacobsidford.github.io/react-timecalendar/",
 	"license": "MIT",
-	"repository": "https://github.com/jacobsidford/react-timecalendar/",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jacobsidford/react-timecalendar.git"
+	},
 	"keywords": [
 		"react",
 		"react-component",
