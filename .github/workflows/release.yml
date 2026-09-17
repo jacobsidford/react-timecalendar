@@ -22,7 +22,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm >= 11.5.1; Node 20 bundles 10.x.
+      # No registry-url on setup-node: it injects a placeholder NODE_AUTH_TOKEN
+      # that overrides the OIDC exchange and the registry answers 404.
+      - run: npm install -g npm@latest
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
