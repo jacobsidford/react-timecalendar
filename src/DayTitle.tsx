@@ -10,6 +10,8 @@ export default class DayTitle extends React.Component<
   DayTitleProps,
   DayTitleState
 > {
+  private dayTitle: HTMLDivElement | null = null;
+
   constructor(props: DayTitleProps) {
     super(props);
     this.state = {
@@ -18,9 +20,9 @@ export default class DayTitle extends React.Component<
   }
 
   componentDidMount() {
+    const parent = this.dayTitle?.parentElement;
     this.setState({
-      // @ts-ignore
-      dateFormat: this.dayTitle.parentNode.clientWidth > 500 ? "dddd" : "ddd",
+      dateFormat: parent && parent.clientWidth > 500 ? "dddd" : "ddd",
     });
   }
 
@@ -29,7 +31,7 @@ export default class DayTitle extends React.Component<
     const { dateFormat } = this.state;
     const days = [];
     const startDate = dateFns.startOfWeek(currentMonth);
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 7; i += 1) {
       days.push(
         <div className="col col-center" key={i}>
           {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
@@ -40,7 +42,6 @@ export default class DayTitle extends React.Component<
       <div
         className="days row"
         ref={(c) => {
-          // @ts-ignore
           this.dayTitle = c;
         }}
       >

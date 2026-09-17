@@ -3,6 +3,7 @@ import dateFns from "date-fns";
 import DayTitle from "./DayTitle";
 import Day from "./Day";
 import { WeeksProps } from "./types";
+import { isWithinSelection } from "./selection";
 
 export default class Weeks extends PureComponent<WeeksProps> {
   generateClasses(day: Date) {
@@ -10,47 +11,45 @@ export default class Weeks extends PureComponent<WeeksProps> {
     classSet += ` ${dateFns.format(day, "ddd")}`;
     classSet += dateFns.isToday(day) ? " today" : "";
     classSet += this.isDaySelected(day) ? " selected" : "";
-    classSet += this.isdayDisabled(day) ? " disabled" : "";
+    classSet += this.isDayDisabled(day) ? " disabled" : "";
 
     return classSet;
   }
 
-  isDaySelected(day: Date) {
+  isDaySelected(day: Date): boolean {
     const { selectedDate, selectedTime } = this.props;
-    if(dateFns.isSameDay(day, selectedDate) || dateFns.isWithinRange(day, selectedTime.start, selectedTime.end)) {
-    return true;
-    } 
+    return (
+      dateFns.isSameDay(day, selectedDate) ||
+      isWithinSelection(day, selectedTime)
+    );
   }
 
-  isdayDisabled(day: Date) {
+  isDayDisabled(day: Date): boolean {
     const { clickable, disableHistory, selectedDate, timeSlot } = this.props;
-    if (!clickable || (disableHistory && dateFns.isBefore(day, dateFns.endOfYesterday())) || !dateFns.isSameMonth(day, selectedDate)) { 
-      return true
-    };
-
-    if(!timeSlot && this.isBetweenBookings(day)) {
+    if (
+      !clickable ||
+      (disableHistory && dateFns.isBefore(day, dateFns.endOfYesterday())) ||
+      !dateFns.isSameMonth(day, selectedDate)
+    ) {
       return true;
     }
+    return !timeSlot && this.isBetweenBookings(day);
   }
-  
-  isBetweenBookings(day: Date) {
+
+  isBetweenBookings(day: Date): boolean {
     const { bookings } = this.props;
-    for (let f = 0; f < bookings.length; f += 1) {
-      if (dateFns.isWithinRange(
+    return bookings.some((booking) =>
+      dateFns.isWithinRange(
         day,
-        dateFns.startOfDay(bookings[f].start_time),
-        dateFns.endOfDay(bookings[f].end_time)
-      )) {
-        return true
-      }
-     }
+        dateFns.startOfDay(booking.start_time),
+        dateFns.endOfDay(booking.end_time)
+      )
+    );
   }
 
   render() {
     const { selectedDate, onDateClick } = this.props;
-    const endDate = dateFns.endOfWeek(
-      dateFns.endOfMonth(dateFns.startOfMonth(selectedDate))
-    );
+    const endDate = dateFns.endOfWeek(dateFns.endOfMonth(selectedDate));
     const rows = [];
     let days = [];
     let day = dateFns.startOfWeek(dateFns.startOfMonth(selectedDate));
@@ -62,7 +61,7 @@ export default class Weeks extends PureComponent<WeeksProps> {
         days.push(
           <Day
             classSet={classSet}
-            key={JSON.stringify(day)}
+            key={day.toISOString()}
             date={dateFns.format(day, "D")}
             onDateClick={() => onDateClick(cloneDay)}
           />
@@ -70,7 +69,7 @@ export default class Weeks extends PureComponent<WeeksProps> {
         day = dateFns.addDays(day, 1);
       }
       rows.push(
-        <div className="row" key={JSON.stringify(day)}>
+        <div className="row" key={day.toISOString()}>
           {days}
         </div>
       );

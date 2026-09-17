@@ -2,116 +2,94 @@ import React, { PureComponent } from "react";
 import dateFns from "date-fns";
 import TimeSlot from "./TimeSlot";
 import { TimeSelectProps } from "./types";
+import { isWithinSelection } from "./selection";
 
-type TimeSelectState = {
-  selectorClass: string;
-};
-export default class TimeSelect extends PureComponent<
-  TimeSelectProps,
-  TimeSelectState
-> {
-  constructor(props: TimeSelectProps) {
-    super(props);
-    this.state = { selectorClass: "inactive" };
-    this.selectorClick = this.selectorClick.bind(this);
-    this.generateOpenHours = this.generateOpenHours.bind(this);
-    this.isTimeDisabled = this.isTimeDisabled.bind(this);
-  }
+const SLOTS_PER_ROW = 4;
 
-  selectorClick(): void {
-    const { selectorClass } = this.state;
-    this.setState({
-      selectorClass: selectorClass === "inactive" ? "active" : "inactive",
-    });
-  }
-
-  generateOpenHours(): Date[] {
-    const openTimes = [];
+export default class TimeSelect extends PureComponent<TimeSelectProps> {
+  /** Resolve [open, close] Dates for the selected day from the openHours prop. */
+  generateOpenHours(): [Date, Date] | null {
     const { openHours, selectedDate } = this.props;
     const dayStart = dateFns.startOfDay(selectedDate);
-    const dayNum = parseInt(dateFns.format(selectedDate, "d"), 10);
+    const dayOfWeek = dateFns.getDay(selectedDate);
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    let hours: number[] | undefined;
     if (openHours.length === 1) {
-      openTimes[0] = dateFns.addHours(dayStart, openHours[0][0]);
-      openTimes[1] = dateFns.addHours(dayStart, openHours[0][1]);
+      [hours] = openHours;
     } else if (openHours.length === 2) {
-      if (dayNum === 0 || dayNum === 6) {
-        openTimes[0] = dateFns.addHours(dayStart, openHours[1][0]);
-        openTimes[1] = dateFns.addHours(dayStart, openHours[1][1]);
-      } else {
-        openTimes[0] = dateFns.addHours(dayStart, openHours[0][0]);
-        openTimes[1] = dateFns.addHours(dayStart, openHours[0][1]);
-      }
+      hours = openHours[isWeekend ? 1 : 0];
     } else if (openHours.length === 7) {
-      openTimes[0] = dateFns.addHours(dayStart, openHours[dayNum][0]);
-      openTimes[1] = dateFns.addHours(dayStart, openHours[dayNum][1]);
+      hours = openHours[dayOfWeek];
     }
-    return openTimes;
+    if (!hours || hours.length < 2) return null;
+
+    return [
+      dateFns.addHours(dayStart, hours[0]),
+      dateFns.addHours(dayStart, hours[1]),
+    ];
   }
 
-  isTimeDisabled(time: Date, openHours: Date[]) {
+  isTimeDisabled(time: Date, close: Date): boolean {
     const { bookings, disableHistory } = this.props;
-    if (disableHistory && dateFns.isBefore(time, new Date()) || !dateFns.isBefore(time, openHours[1])) { 
-      return true
-    };
+    if (disableHistory && dateFns.isBefore(time, new Date())) return true;
+    if (!dateFns.isBefore(time, close)) return true;
 
-    for (let f = 0; f < bookings.length; f += 1) {
-      if (dateFns.isWithinRange(
+    return bookings.some((booking) =>
+      dateFns.isWithinRange(
         time,
-        bookings[f].start_time,
-        dateFns.subMinutes(bookings[f].end_time, 1)
-      )) {
-        return true
-      }
-    }
+        booking.start_time,
+        dateFns.subMinutes(booking.end_time, 1)
+      )
+    );
   }
 
   render() {
-    const {
-      timeSlot,
-      selectedTime,
-      onTimeClick,
-    } = this.props;
-    const { selectorClass } = this.state;
+    const { timeSlot, selectedTime, onTimeClick } = this.props;
     const openHours = this.generateOpenHours();
-    const dateFormat = "HH-mm";
-    const rows = [];
-    let timeSlots = [];
-    let timePick = openHours[0];
-    // eslint-disable-next-line no-mixed-operators
-    const difference =
-      (dateFns.differenceInMinutes(openHours[1], openHours[0]) / timeSlot) % 4;
-    while (timePick < dateFns.addMinutes(openHours[1], timeSlot * difference)) {
-      for (let i = 0; i < 4; i += 1) {
-        let classSet = '';
-        classSet += dateFns.isBefore(timePick, openHours[1]) ? "" : " disabled";
-        classSet += dateFns.isWithinRange(timePick, selectedTime.start, selectedTime.end)
-          ? " selectedTime"
-          : "";
-          classSet += this.isTimeDisabled(timePick, openHours) ? " disabled" : "";
+    const rows: React.ReactNode[] = [];
 
-        const cloneTime = timePick;
-        timeSlots.push(
-          <TimeSlot
-            key={String(cloneTime)}
-            time={dateFns.format(cloneTime, dateFormat)}
-            classSet={classSet}
-            onTimeClick={() => onTimeClick(cloneTime)}
-          />
+    if (openHours && timeSlot > 0) {
+      const [open, close] = openHours;
+      // Pad the last row out to a full row of slots; the padding renders disabled.
+      const slotCount = dateFns.differenceInMinutes(close, open) / timeSlot;
+      const padding = (SLOTS_PER_ROW - (slotCount % SLOTS_PER_ROW)) % SLOTS_PER_ROW;
+      const last = dateFns.addMinutes(close, timeSlot * padding);
+
+      let timePick = open;
+      let timeSlots: React.ReactNode[] = [];
+      while (timePick < last) {
+        for (let i = 0; i < SLOTS_PER_ROW; i += 1) {
+          let classSet = "";
+          classSet += isWithinSelection(timePick, selectedTime) ? " selectedTime" : "";
+          classSet += this.isTimeDisabled(timePick, close) ? " disabled" : "";
+
+          const cloneTime = timePick;
+          timeSlots.push(
+            <TimeSlot
+              key={cloneTime.toISOString()}
+              time={dateFns.format(cloneTime, "HH:mm")}
+              classSet={classSet}
+              onTimeClick={() => onTimeClick(cloneTime)}
+            />
+          );
+          timePick = dateFns.addMinutes(timePick, timeSlot);
+        }
+        rows.push(
+          <div className="row" key={timePick.toISOString()}>
+            {timeSlots}
+          </div>
         );
-        timePick = dateFns.addMinutes(timePick, timeSlot);
+        timeSlots = [];
       }
-      rows.push(
-        <div className="row" key={String(timePick)}>
-          {timeSlots}
-        </div>
-      );
-      timeSlots = [];
     }
 
     return (
       <div className="timeSelector">
         <div className="optionSpacer body">
-          <div className={`optionHolder ${selectorClass}`}>{rows}</div>
+          <div className="optionHolder">
+            {rows.length > 0 ? rows : <p className="closed">Closed</p>}
+          </div>
         </div>
       </div>
     );

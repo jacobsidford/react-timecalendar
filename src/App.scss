@@ -218,6 +218,10 @@
         transition: 0.5s ease-out;
       }
     }
+    .closed {
+      border-bottom: 0;
+      color: var(--text-color-light);
+    }
     .optionHolder {
     left: 0px;
     top: 0px;

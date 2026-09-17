@@ -1,6 +1,6 @@
-// @ts-nocheck
 import React from "react";
 import { HeaderProps } from "./types";
+import { onActivate } from "./keyboard";
 
 function Header(props: HeaderProps) {
   const { prevTime, selectedDate, nextTime } = props;
@@ -10,9 +10,10 @@ function Header(props: HeaderProps) {
         <div
           className="icon"
           onClick={prevTime}
-          onKeyDown={prevTime}
+          onKeyDown={onActivate(prevTime)}
           tabIndex={0}
           role="button"
+          aria-label="Previous"
         >
           chevron_left
         </div>
@@ -20,14 +21,17 @@ function Header(props: HeaderProps) {
       <div className="col col-center">
         <span>{selectedDate}</span>
       </div>
-      <div
-        className="col col-end"
-        onClick={nextTime}
-        onKeyDown={nextTime}
-        tabIndex="0"
-        role="button"
-      >
-        <div className="icon">chevron_right</div>
+      <div className="col col-end">
+        <div
+          className="icon"
+          onClick={nextTime}
+          onKeyDown={onActivate(nextTime)}
+          tabIndex={0}
+          role="button"
+          aria-label="Next"
+        >
+          chevron_right
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React, { PureComponent } from "react";
 import dateFns from "date-fns";
 import Header from "./Header";
@@ -7,16 +6,35 @@ import TimeSelect from "./TimeSelect";
 import { TimeCalendarProps } from "./types";
 import "./App.scss";
 
+export type {
+  TimeCalendarProps,
+  Booking,
+  SelectedTime,
+  DateInput,
+} from "./types";
+
 type TimeCalendarState = {
   selectedDate: Date;
   timeSelect: boolean;
 };
 
+const noop = () => {};
+
 export default class TimeCalendar extends PureComponent<
   TimeCalendarProps,
   TimeCalendarState
 > {
-  constructor(props) {
+  static defaultProps: Partial<TimeCalendarProps> = {
+    openHours: [],
+    bookings: [],
+    disableHistory: true,
+    clickable: true,
+    timeSlot: 30,
+    startTime: "",
+    endTime: "",
+  };
+
+  constructor(props: TimeCalendarProps) {
     super(props);
     this.state = {
       selectedDate: new Date(),
@@ -29,11 +47,9 @@ export default class TimeCalendar extends PureComponent<
   }
 
   onDateClick(day: Date) {
-    const { onDateFunction } = this.props;
-    this.setState({
-      selectedDate: day,
-    });
-    if (onDateFunction) onDateFunction(day);
+    const { onDateClick, onDateFunction } = this.props;
+    this.setState({ selectedDate: day });
+    (onDateClick || onDateFunction || noop)(day);
   }
 
   nextTime() {
@@ -51,10 +67,11 @@ export default class TimeCalendar extends PureComponent<
 
     if (
       disableHistory &&
-      ((dateFns.isPast(dateFns.startOfMonth(selectedDate)) && !timeSelect) ||
-        (dateFns.isPast(dateFns.startOfDay(selectedDate)) && timeSelect))
-    )
+      ((!timeSelect && dateFns.isPast(dateFns.startOfMonth(selectedDate))) ||
+        (timeSelect && dateFns.isPast(dateFns.startOfDay(selectedDate))))
+    ) {
       return;
+    }
 
     this.setState({
       selectedDate: timeSelect
@@ -64,62 +81,57 @@ export default class TimeCalendar extends PureComponent<
   }
 
   timeSelectToggle() {
-    const { timeSelect } = this.state;
-    this.setState({
-      timeSelect: !timeSelect,
-    });
+    this.setState((state) => ({ timeSelect: !state.timeSelect }));
   }
 
   render() {
     const {
-      disableHistory,
-      timeSlot,
-      openHours,
-      onTimeClick,
-      bookings,
-      startTime,
-      endTime,
-      clickable,
+      disableHistory = true,
+      timeSlot = 30,
+      openHours = [],
+      onTimeClick = noop,
+      bookings = [],
+      startTime = "",
+      endTime = "",
+      clickable = true,
     } = this.props;
     const { selectedDate, timeSelect } = this.state;
+    const selectedTime = { start: startTime, end: endTime };
+    const timeSelectAvailable = timeSlot > 0 && openHours.length > 0;
+
     return (
       <div className="calendar">
         <Header
           selectedDate={
-            !timeSelect
-              ? dateFns.format(selectedDate, "MMMM YYYY")
-              : dateFns.format(selectedDate, "dddd Do MMMM")
+            timeSelect
+              ? dateFns.format(selectedDate, "dddd Do MMMM")
+              : dateFns.format(selectedDate, "MMMM YYYY")
           }
           nextTime={this.nextTime}
           prevTime={this.prevTime}
-          timeSelect={timeSelect}
         />
         {timeSelect ? (
-          <>
-            <TimeSelect
-              selectedDate={selectedDate}
-              disableHistory={disableHistory}
-              timeSlot={timeSlot}
-              openHours={openHours}
-              onTimeClick={onTimeClick}
-              bookings={bookings}
-              selectedTime={{start: startTime, end: endTime}}
-            />
-          </>
+          <TimeSelect
+            selectedDate={selectedDate}
+            disableHistory={disableHistory}
+            timeSlot={timeSlot}
+            openHours={openHours}
+            onTimeClick={onTimeClick}
+            bookings={bookings}
+            selectedTime={selectedTime}
+          />
         ) : (
-          <>
-            <Weeks
-              selectedDate={selectedDate}
-              disableHistory={disableHistory}
-              onDateClick={this.onDateClick}
-              bookings={bookings}
-              timeSlot={timeSlot}
-              clickable={clickable}
-              selectedTime={{start: startTime, end: endTime}}
-            />
-          </>
+          <Weeks
+            selectedDate={selectedDate}
+            disableHistory={disableHistory}
+            onDateClick={this.onDateClick}
+            bookings={bookings}
+            timeSlot={timeSelectAvailable ? timeSlot : 0}
+            clickable={clickable}
+            selectedTime={selectedTime}
+          />
         )}
-        {timeSlot && openHours && (
+        {timeSelectAvailable && (
           <button
             className="timeSelector"
             onClick={this.timeSelectToggle}
