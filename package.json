@@ -1,6 +1,6 @@
 {
 	"name": "react-timecalendar",
-	"version": "2.1.4",
+	"version": "2.2.0",
 	"description": "Lightweight React calendar with time options for booking",
 	"main": "build/index.js",
 	"module": "build/index.es.js",
@@ -26,7 +26,12 @@
 	},
 	"scripts": {
 		"build": "rollup -c",
-		"prepublish": "npm run build"
+		"dev": "vite",
+		"build:demo": "vite build",
+		"preview": "vite preview",
+		"test": "vitest run",
+		"typecheck": "tsc --noEmit",
+		"prepublishOnly": "npm run build"
 	},
 	"browserslist": [
 		">0.2%",
@@ -35,21 +40,30 @@
 		"not op_mini all"
 	],
 	"peerDependencies": {
-		"react": "^16.8.3",
-		"react-dom": "^16.8.3"
+		"react": ">=16.8.0",
+		"react-dom": ">=16.8.0"
 	},
 	"devDependencies": {
-		"@rollup/plugin-commonjs": "^15.0.0",
-		"@rollup/plugin-node-resolve": "^9.0.0",
-		"@types/react": "^16.9.49",
-		"node-sass": "^6.0.1",
-		"react": "^16.8.3",
-		"react-dom": "^16.8.3",
-		"rollup": "^2.26.11",
-		"rollup-plugin-peer-deps-external": "^2.2.3",
-		"rollup-plugin-postcss": "^3.1.8",
-		"rollup-plugin-typescript2": "^0.27.2",
-		"tslib": "^2.0.3",
-		"typescript": "^4.0.2"
-	}
+		"@rollup/plugin-commonjs": "^25.0.7",
+		"@rollup/plugin-node-resolve": "^15.2.3",
+		"@rollup/plugin-typescript": "^11.1.6",
+		"@testing-library/jest-dom": "^6.4.2",
+		"@testing-library/react": "^14.2.1",
+		"@types/node": "^20.19.43",
+		"@types/react": "^18.2.66",
+		"@types/react-dom": "^18.2.22",
+		"@vitejs/plugin-react": "^4.2.1",
+		"jsdom": "^24.0.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"rollup": "^2.79.1",
+		"rollup-plugin-peer-deps-external": "^2.2.4",
+		"rollup-plugin-postcss": "^4.0.2",
+		"sass": "^1.71.1",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.2",
+		"vite": "^5.1.6",
+		"vitest": "^1.4.0"
+	},
+	"types": "build/index.d.ts"
 }

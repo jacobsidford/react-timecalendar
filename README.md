@@ -1,6 +1,7 @@
 # React Time Calendar
 
-![CircleCI](https://img.shields.io/circleci/build/github/jacobsidford/react-timecalendar?token=1b2fcb60222b79f423e1cde88a21bf26c4bdc94d)
+[![CI](https://github.com/jacobsidford/react-timecalendar/actions/workflows/ci.yml/badge.svg)](https://github.com/jacobsidford/react-timecalendar/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/react-timecalendar)](https://www.npmjs.com/package/react-timecalendar)
 
 Lightweight and customizable date/time picker for react.js, simply pass in a callback function to receive selected date, time or time periods of both.
 Ideal for building a booking system in React.
@@ -58,9 +59,9 @@ const MyCalendar = () => (
 | `clickable`      | bool     | `true`  | Make days clickable.                                   |
 | `openHours`      | array    | `[][]`  | Times slots that will be rendered available.           |
 | `timeSlot`       | number   | 30      | Amount of time needed for each booking.                |
-| `onDateFunction` | function | null    | Function called on click of calendar day, returns day  |
-| `onTimeFunction` | function | null    | Function called on click of time slot, returns time    |
-| `bookings`       | array    | '[]'    | Times that will be rendered unavailable                |
+| `onDateClick`    | function | null    | Called on click of a calendar day with the `Date`      |
+| `onTimeClick`    | function | null    | Called on click of a time slot with the `Date`         |
+| `bookings`       | array    | `[]`    | Times that will be rendered unavailable                |
 | `startTime`      | object   | null    | MultiPick: First time selected                         |
 | `endTime`        | object   | null    | MultiPick: Second time selected, must be > first time  |
 
@@ -89,7 +90,9 @@ const openHours = [
 // To set yourself as closed on a day, open == close
 ```
 
-To activate time selection timeSlot and openHours must be provided.
+To activate time selection `openHours` must be provided (`timeSlot` defaults to 30).
+
+Requires React 16.8 or newer (18 and 19 supported).
 
 ## Styling
 
@@ -141,7 +144,7 @@ SCSS class taxonomy:
 Standard calendar for selecting a date. onDateClick returns the selected date object.
 
 ```js
-<TimeCalendar clickable onDateClick={this.onDateFunction} />
+<TimeCalendar clickable onDateClick={this.handleDateClick} />
 ```
 
 #### Time Selector
@@ -262,13 +265,21 @@ render () {
 - [ ] Can select multiple days for booking if no timeslot
 - [ ] Allow onClick URL's in bookings displayed on calendar
 
+## Development
+
+```bash
+npm install
+npm run dev         # demo at http://localhost:5173/react-timecalendar/
+npm test            # vitest + testing-library
+npm run build       # library → build/
+npm run build:demo  # demo site → dist-demo/
+```
+
+The demo deploys to GitHub Pages automatically on every push to `master`.
+
 ## Dependencies
 
-[date-fns](https://github.com/date-fns/date-fns)
-
-## Style guide
-
-Following Airbnb's [styling guide](https://github.com/airbnb/javascript/tree/master/react)
+[date-fns](https://github.com/date-fns/date-fns) v1
 
 ## Licensing
 
