@@ -5,7 +5,7 @@
 
 Lightweight and customizable date/time picker for react.js, simply pass in a callback function to receive selected date, time or time periods of both.
 Ideal for building a booking system in React.
-![Date selection calendar](./public/images/screen1.png?raw=true "Screenshot of calendar")
+![Demo: pick a day, switch to time view, select a range around a booking](./public/images/demo.gif?raw=true "react-timecalendar demo")
 
 ## Features
 
@@ -19,10 +19,8 @@ Ideal for building a booking system in React.
 
 ```bash
 npm install react-timecalendar
-
-or
-
-$ yarn add react-timecalendar
+# or
+yarn add react-timecalendar
 ```
 
 Online demo available at https://jacobsidford.github.io/react-timecalendar/
@@ -53,17 +51,17 @@ const MyCalendar = () => (
 
 ## Options
 
-| Prop             | Type     | Default | Description                                            |
-| :--------------- | :------- | :------ | :----------------------------------------------------- |
-| `disableHistory` | bool     | `true`  | Disable navigating before current month.               |
-| `clickable`      | bool     | `true`  | Make days clickable.                                   |
-| `openHours`      | array    | `[][]`  | Times slots that will be rendered available.           |
-| `timeSlot`       | number   | 30      | Amount of time needed for each booking.                |
-| `onDateClick`    | function | null    | Called on click of a calendar day with the `Date`      |
-| `onTimeClick`    | function | null    | Called on click of a time slot with the `Date`         |
-| `bookings`       | array    | `[]`    | Times that will be rendered unavailable                |
-| `startTime`      | object   | null    | MultiPick: First time selected                         |
-| `endTime`        | object   | null    | MultiPick: Second time selected, must be > first time  |
+| Prop             | Type             | Default | Description                                                                 |
+| :--------------- | :--------------- | :------ | :-------------------------------------------------------------------------- |
+| `disableHistory` | bool             | `true`  | Block navigating to past months/days and disable past days and time slots.  |
+| `clickable`      | bool             | `true`  | Make days clickable. `false` renders every day disabled.                    |
+| `openHours`      | number[][]       | `[]`    | Opening hours per day, see [Open Hours](#open-hours). Enables time select.  |
+| `timeSlot`       | number           | `30`    | Length of each time slot in minutes.                                        |
+| `onDateClick`    | function         | —       | Called with the clicked day as a `Date`. (`onDateFunction` still works, deprecated.) |
+| `onTimeClick`    | function         | —       | Called with the clicked time slot as a `Date`.                              |
+| `bookings`       | Booking[]        | `[]`    | Existing bookings; overlapping slots (or days, without `openHours`) render disabled. |
+| `startTime`      | Date \| string   | `""`    | Multi-select: first selected time.                                          |
+| `endTime`        | Date \| string   | `""`    | Multi-select: second selected time, must be after `startTime`.              |
 
 ### Open Hours
 
@@ -86,11 +84,13 @@ const openHours = [
   [0, 0],
   [9, 17],
 ];
-// 7 array's to indicate each day of the week.
+// 7 arrays to indicate each day of the week, Sunday first.
 // To set yourself as closed on a day, open == close
+// Any other length renders "Closed".
 ```
 
 To activate time selection `openHours` must be provided (`timeSlot` defaults to 30).
+Slots are laid out four per row; the last row is padded with disabled slots.
 
 Requires React 16.8 or newer (18 and 19 supported).
 
@@ -109,35 +109,30 @@ SCSS class taxonomy:
   .body{
     .row{
       .col
-      .selected
-      .disabled
-      .selectedTime
-      .sun
-      .mon
-      .tue
-      .wed
-      .thu
-      .fri
-      .sat
       .cell{
         .number
         .bg
-        }
+      }
+      .today
+      .selected
+      .disabled
+      .selectedTime
+      .Sun .Mon .Tue .Wed .Thu .Fri .Sat
     }
+  }
   .timeSelector{
-        p
-        .active
-        .inactive
-        .optionSpacer
-        .optionHolder{
-          .col
-        }
-   }
+    p
+    .optionSpacer
+    .optionHolder{
+      .col
+      .closed
+    }
+  }
 }
 
 ```
 
-## Feature Demo's:
+## Feature demos
 
 #### Date Selector
 
@@ -219,12 +214,13 @@ class DemoCalendar extends React.Component {
 
 #### Booked Timeslots
 
-Calendar can receive an array of bookings and will then add .disabled to times which
-are within the inclusive booked times provided. You can do an edit of the handleTimeClick
-function above to make sure the bookings cannot be included in a multi selection booking.
+Calendar can receive an array of bookings and will then add `.disabled` to slots from
+`start_time` (inclusive) up to `end_time` (exclusive). Without `openHours`, whole days
+that overlap a booking are disabled instead. The component does not stop a multi-selection
+spanning a booking; see `demo/main.tsx` for a `handleTimeClick` that resets when it does.
 
-The booking times can come in multiple formats as they're parsed
-by dateFns. If there's any errors, try using Javascript Date objects.
+Booking times can be `Date` objects or anything date-fns v1 can parse. If in doubt, use `Date`.
+Note `disableHistory` (default `true`) hides past dates, so bookings in the past never show.
 
 ```js
 render () {
@@ -234,13 +230,13 @@ render () {
   const bookings = [
           {
             id: 1,
-            start_time: "2019-03-27 13:00:00",
-            end_time: "2019-03-27 13:30:00"
+            start_time: "2030-03-27 13:00:00",
+            end_time: "2030-03-27 13:30:00"
           },
           {
             id: 2,
-            start_time: "2019-03-27 07:00:00",
-            end_time: "2019-03-27 07:30:00",
+            start_time: "2030-03-27 14:00:00",
+            end_time: "2030-03-27 15:30:00",
           }
         ];
 
@@ -262,7 +258,6 @@ render () {
 
 ### TODO:
 
-- [ ] Can select multiple days for booking if no timeslot
 - [ ] Allow onClick URL's in bookings displayed on calendar
 
 ## Development
