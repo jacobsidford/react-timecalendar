@@ -12,11 +12,12 @@ import {
 import Header from "./Header";
 import Weeks from "./Weeks";
 import TimeSelect from "./TimeSelect";
-import { TimeCalendarProps } from "./types";
+import { CalendarView, TimeCalendarProps } from "./types";
 import "./App.scss";
 
 export type {
   TimeCalendarProps,
+  CalendarView,
   Booking,
   SelectedTime,
   DateInput,
@@ -24,11 +25,16 @@ export type {
 
 type TimeCalendarState = {
   selectedDate: Date;
-  timeSelect: boolean;
+  view: CalendarView;
 };
 
 const noop = () => {};
 
+/**
+ * Both `selectedDate` and `view` follow the standard controlled/uncontrolled
+ * pattern: pass the prop to control it, pass the `default*` prop (or nothing)
+ * to let the component own it. Change callbacks fire in both modes.
+ */
 export class TimeCalendar extends PureComponent<
   TimeCalendarProps,
   TimeCalendarState
@@ -46,8 +52,8 @@ export class TimeCalendar extends PureComponent<
   constructor(props: TimeCalendarProps) {
     super(props);
     this.state = {
-      selectedDate: new Date(),
-      timeSelect: false,
+      selectedDate: props.defaultSelectedDate ?? new Date(),
+      view: props.defaultView ?? "month",
     };
     this.onDateClick = this.onDateClick.bind(this);
     this.nextTime = this.nextTime.bind(this);
@@ -55,42 +61,84 @@ export class TimeCalendar extends PureComponent<
     this.timeSelectToggle = this.timeSelectToggle.bind(this);
   }
 
+  /**
+   * Mirror controlled props into state so that dropping a prop later
+   * (controlled → uncontrolled) keeps the last value instead of snapping
+   * back to the constructor default.
+   */
+  static getDerivedStateFromProps(
+    props: TimeCalendarProps,
+    state: TimeCalendarState
+  ): Partial<TimeCalendarState> | null {
+    const next: Partial<TimeCalendarState> = {};
+    if (props.selectedDate !== undefined && props.selectedDate !== state.selectedDate) {
+      next.selectedDate = props.selectedDate;
+    }
+    if (props.view !== undefined && props.view !== state.view) {
+      next.view = props.view;
+    }
+    return Object.keys(next).length ? next : null;
+  }
+
+  get selectedDate(): Date {
+    return this.props.selectedDate ?? this.state.selectedDate;
+  }
+
+  get timeSelectAvailable(): boolean {
+    const { timeSlot = 30, openHours = [] } = this.props;
+    return timeSlot > 0 && openHours.length > 0;
+  }
+
+  /** The view actually rendered: "day" needs openHours, otherwise month. */
+  get view(): CalendarView {
+    const requested = this.props.view ?? this.state.view;
+    return requested === "day" && this.timeSelectAvailable ? "day" : "month";
+  }
+
+  setSelectedDate(day: Date) {
+    const { selectedDate, onSelectedDateChange } = this.props;
+    if (selectedDate === undefined) this.setState({ selectedDate: day });
+    (onSelectedDateChange || noop)(day);
+  }
+
+  setView(view: CalendarView) {
+    const { view: controlled, onViewChange } = this.props;
+    if (controlled === undefined) this.setState({ view });
+    (onViewChange || noop)(view);
+  }
+
   onDateClick(day: Date) {
     const { onDateClick, onDateFunction } = this.props;
-    this.setState({ selectedDate: day });
+    this.setSelectedDate(day);
     (onDateClick || onDateFunction || noop)(day);
   }
 
   nextTime() {
-    const { selectedDate, timeSelect } = this.state;
-    this.setState({
-      selectedDate: timeSelect
-        ? addDays(selectedDate, 1)
-        : addMonths(selectedDate, 1),
-    });
+    const { selectedDate, view } = this;
+    this.setSelectedDate(
+      view === "day" ? addDays(selectedDate, 1) : addMonths(selectedDate, 1)
+    );
   }
 
   prevTime() {
-    const { selectedDate, timeSelect } = this.state;
+    const { selectedDate, view } = this;
     const { disableHistory } = this.props;
 
     if (
       disableHistory &&
-      ((!timeSelect && isPast(startOfMonth(selectedDate))) ||
-        (timeSelect && isPast(startOfDay(selectedDate))))
+      ((view === "month" && isPast(startOfMonth(selectedDate))) ||
+        (view === "day" && isPast(startOfDay(selectedDate))))
     ) {
       return;
     }
 
-    this.setState({
-      selectedDate: timeSelect
-        ? subDays(selectedDate, 1)
-        : subMonths(selectedDate, 1),
-    });
+    this.setSelectedDate(
+      view === "day" ? subDays(selectedDate, 1) : subMonths(selectedDate, 1)
+    );
   }
 
   timeSelectToggle() {
-    this.setState((state) => ({ timeSelect: !state.timeSelect }));
+    this.setView(this.view === "day" ? "month" : "day");
   }
 
   render() {
@@ -104,22 +152,22 @@ export class TimeCalendar extends PureComponent<
       endTime = "",
       clickable = true,
     } = this.props;
-    const { selectedDate, timeSelect } = this.state;
+    const { selectedDate, timeSelectAvailable } = this;
     const selectedTime = { start: startTime, end: endTime };
-    const timeSelectAvailable = timeSlot > 0 && openHours.length > 0;
+    const dayView = this.view === "day";
 
     return (
       <div className="calendar">
         <Header
           selectedDate={
-            timeSelect
+            dayView
               ? format(selectedDate, "EEEE do MMMM")
               : format(selectedDate, "MMMM yyyy")
           }
           nextTime={this.nextTime}
           prevTime={this.prevTime}
         />
-        {timeSelect ? (
+        {dayView ? (
           <TimeSelect
             selectedDate={selectedDate}
             disableHistory={disableHistory}
@@ -146,7 +194,7 @@ export class TimeCalendar extends PureComponent<
             onClick={this.timeSelectToggle}
             type="button"
           >
-            <p>{timeSelect ? "Select Day" : "Select Time"}</p>
+            <p>{dayView ? "Select Day" : "Select Time"}</p>
           </button>
         )}
       </div>

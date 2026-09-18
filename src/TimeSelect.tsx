@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import {
-  addHours,
   addMinutes,
   differenceInMinutes,
   format,
   getDay,
   isBefore,
   isWithinInterval,
+  set,
   startOfDay,
   subMinutes,
 } from "date-fns";
@@ -35,10 +35,14 @@ export default class TimeSelect extends PureComponent<TimeSelectProps> {
     }
     if (!hours || hours.length < 2) return null;
 
-    return [
-      addHours(dayStart, hours[0]),
-      addHours(dayStart, hours[1]),
-    ];
+    // Wall-clock, not elapsed hours: addHours(startOfDay, 9) lands on 10:00
+    // on a spring-forward day.
+    const atClock = (decimalHours: number) =>
+      set(dayStart, {
+        hours: Math.floor(decimalHours),
+        minutes: Math.round((decimalHours % 1) * 60),
+      });
+    return [atClock(hours[0]), atClock(hours[1])];
   }
 
   isTimeDisabled(time: Date, close: Date): boolean {

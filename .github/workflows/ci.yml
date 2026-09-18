@@ -17,5 +17,12 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm test
+      - name: Tests at date boundaries and DST transitions
+        run: |
+          for d in 2026-12-31T23:30:00 2027-01-01T00:10:00 2028-02-29T12:00:00 2027-09-25T12:00:00 2027-04-03T12:00:00; do
+            TZ=Pacific/Auckland FAKE_NOW=$d npm test
+          done
+          TZ=Europe/London FAKE_NOW=2027-03-27T12:00:00 npm test
+          TZ=America/New_York FAKE_NOW=2027-03-13T12:00:00 npm test
       - run: npm run build
       - run: npm run build:demo
