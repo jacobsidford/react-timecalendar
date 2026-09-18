@@ -60,6 +60,12 @@ Styles are injected automatically on import; no separate CSS file to include.
 
 | Prop             | Type             | Default | Description                                                                 |
 | :--------------- | :--------------- | :------ | :-------------------------------------------------------------------------- |
+| `selectedDate`   | Date             | —       | Controlled focused day. Pair with `onSelectedDateChange`.                   |
+| `defaultSelectedDate` | Date        | today   | Uncontrolled initial day.                                                   |
+| `onSelectedDateChange` | function   | —       | Fires on day click and prev/next navigation with the new `Date`.            |
+| `view`           | `"month" \| "day"` | —    | Controlled view. Pair with `onViewChange`. `"day"` needs `openHours`.       |
+| `defaultView`    | `"month" \| "day"` | `"month"` | Uncontrolled initial view.                                              |
+| `onViewChange`   | function         | —       | Fires when the user toggles between month and day view.                     |
 | `disableHistory` | bool             | `true`  | Block navigating to past months/days and disable past days and time slots.  |
 | `clickable`      | bool             | `true`  | Make days clickable. `false` renders every day disabled.                    |
 | `openHours`      | number[][]       | `[]`    | Opening hours per day, see [Open Hours](#open-hours). Enables time select.  |
@@ -138,6 +144,83 @@ SCSS class taxonomy:
 }
 
 ```
+
+## Complete booking flow
+
+Everything in one place: opening hours, existing bookings blocked out, a start/end range
+that resets if it would span a booking, the calendar controlled from state so it can be
+deep-linked, and the result ready to POST. Copy this and replace the `bookings` fetch.
+
+```tsx
+import { useState } from "react";
+import { isSameDay } from "date-fns";
+import TimeCalendar, { type Booking, type CalendarView } from "react-timecalendar";
+
+const openHours = [
+  [9, 17],   // Mon–Fri 09:00–17:00
+  [10, 14],  // Sat–Sun 10:00–14:00
+];
+
+type Range = { start: Date | ""; end: Date | "" };
+
+export function BookingPicker({ bookings }: { bookings: Booking[] }) {
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
+  const [view, setView] = useState<CalendarView>("month");
+  const [range, setRange] = useState<Range>({ start: "", end: "" });
+
+  // True if any booking overlaps [start, end]. end is the start of the last
+  // selected slot, so it counts as inclusive.
+  const spansBooking = (start: Date, end: Date) =>
+    bookings.some(
+      (b) => new Date(b.start_time) <= end && new Date(b.end_time) > start
+    );
+
+  function handleTimeClick(time: Date) {
+    const { start } = range;
+    if (start === "" || !isSameDay(start, time) || time < start || spansBooking(start, time)) {
+      setRange({ start: time, end: "" });
+    } else {
+      setRange({ start, end: time });
+    }
+  }
+
+  async function confirm() {
+    if (range.start === "" || range.end === "") return;
+    await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      // Slots are browser-local Dates; toISOString() sends them as UTC.
+      body: JSON.stringify({ start: range.start.toISOString(), end: range.end.toISOString() }),
+    });
+  }
+
+  return (
+    <>
+      <TimeCalendar
+        selectedDate={selectedDate}
+        onSelectedDateChange={setSelectedDate}
+        view={view}
+        onViewChange={setView}
+        openHours={openHours}
+        timeSlot={30}
+        bookings={bookings}
+        startTime={range.start}
+        endTime={range.end}
+        onTimeClick={handleTimeClick}
+      />
+      <button type="button" disabled={range.end === ""} onClick={confirm}>
+        Book {range.start && range.end ? `${range.start.toLocaleTimeString()}–${range.end.toLocaleTimeString()}` : ""}
+      </button>
+    </>
+  );
+}
+```
+
+Notes:
+
+- `selectedDate` and `view` are optional. Leave them out for an uncontrolled calendar, or pass `defaultSelectedDate` / `defaultView` to set the initial state only.
+- The range end is inclusive of the clicked slot's start time. To book 09:00–10:00 with 30-minute slots the user clicks 09:00 then 09:30; add `timeSlot` minutes to `range.end` before saving if you want the slot's end.
+- All times are the browser's local timezone. Convert on the server if bookings are shared across regions.
 
 ## Feature demos
 

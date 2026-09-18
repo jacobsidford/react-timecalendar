@@ -27,7 +27,24 @@ export interface HeaderProps {
   nextTime: () => void;
 }
 
+export type CalendarView = "month" | "day";
+
 export interface TimeCalendarProps {
+  /**
+   * Controlled: the day the calendar is focused on (month shown in month
+   * view, day shown in day view). Pair with onSelectedDateChange.
+   */
+  selectedDate?: Date;
+  /** Uncontrolled: initial selected day. Defaults to today. */
+  defaultSelectedDate?: Date;
+  /** Fires whenever the selected day changes: day click, or prev/next navigation. */
+  onSelectedDateChange?: (day: Date) => void;
+  /** Controlled: which view is shown. Pair with onViewChange. */
+  view?: CalendarView;
+  /** Uncontrolled: initial view. Defaults to "month". */
+  defaultView?: CalendarView;
+  /** Fires when the user toggles between month and day view. */
+  onViewChange?: (view: CalendarView) => void;
   /** Opening hours as [open, close] pairs in 24h decimal. 1, 2 or 7 entries. */
   openHours?: number[][];
   /** Existing bookings; slots inside them render as disabled. */

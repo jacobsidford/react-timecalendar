@@ -1,6 +1,6 @@
 {
 	"name": "react-timecalendar",
-	"version": "3.0.1",
+	"version": "3.1.0",
 	"description": "Lightweight React calendar with time options for booking",
 	"main": "build/index.js",
 	"module": "build/index.mjs",
@@ -11,7 +11,9 @@
 	"files": [
 		"build",
 		"LICENSE",
-		"README.md"
+		"README.md",
+		"CHANGELOG.md",
+		"llms.txt"
 	],
 	"homepage": "https://jacobsidford.github.io/react-timecalendar/",
 	"license": "MIT",

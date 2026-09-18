@@ -4,11 +4,9 @@ import {
   addDays,
   format,
   isSameDay,
-  isWithinInterval,
   setHours,
   setMinutes,
   startOfDay,
-  subMinutes,
 } from "date-fns";
 import TimeCalendar, { Booking } from "../src";
 
@@ -34,18 +32,15 @@ const openHours = [
 ];
 
 function overlapsBooking(start: Date, end: Date): boolean {
-  const interval = { start, end };
   return bookings.some(
-    (b) =>
-      isWithinInterval(b.start_time as Date, interval) ||
-      isWithinInterval(subMinutes(b.end_time as Date, 1), interval)
+    (b) => (b.start_time as Date) <= end && (b.end_time as Date) > start
   );
 }
 
 function Demo() {
   const [startTime, setStartTime] = useState<Date | "">("");
   const [endTime, setEndTime] = useState<Date | "">("");
-  const [lastDay, setLastDay] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState(() => new Date());
 
   function handleTimeClick(time: Date) {
     if (startTime === "") {
@@ -83,11 +78,12 @@ function Demo() {
         bookings={bookings}
         startTime={startTime}
         endTime={endTime}
-        onDateClick={setLastDay}
+        selectedDate={selectedDate}
+        onSelectedDateChange={setSelectedDate}
         onTimeClick={handleTimeClick}
       />
       <div className="status">
-        Day: <code>{lastDay ? format(lastDay, "EEE d MMM yyyy") : "—"}</code>{" "}
+        Day: <code>{format(selectedDate, "EEE d MMM yyyy")}</code>{" "}
         Start: <code>{fmt(startTime)}</code> End: <code>{fmt(endTime)}</code>
       </div>
     </>

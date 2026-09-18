@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.1.0 — 2026-09-18
+
+### Added
+- Controlled `selectedDate` / `onSelectedDateChange` and `view` / `onViewChange` props, with `defaultSelectedDate` / `defaultView` for uncontrolled initial state. Existing uncontrolled usage is unchanged.
+- `CalendarView` type export.
+- "Complete booking flow" example in the README and an `llms.txt` for agent crawlers.
+
+### Fixed
+- Opening hours are now wall-clock times. On DST transition days `addHours(startOfDay, 9)` rendered the 09:00 slot as 10:00 (or 08:00).
+- `view="day"` without `openHours` falls back to month view for navigation too; previously prev/next stepped by day behind a month grid and Previous could lock up under `disableHistory`.
+- Dropping a controlled `selectedDate` or `view` prop keeps the last value instead of snapping back to the initial default.
+
 ## 3.0.1 — 2026-09-18
 
 ### Fixed

@@ -1,0 +1,33 @@
+# react-timecalendar
+
+> Lightweight, typed React date and time-slot picker for booking and appointment UIs. Pass opening hours and existing bookings in, get the selected `Date` back. ~6 KB minified plus date-fns v4. React 16.8–19. MIT.
+
+Use it when you need "pick a day, then pick an available 30-minute slot" and existing bookings must be greyed out. Do not use it for full scheduling grids (see react-big-calendar) or plain date pickers (see react-day-picker).
+
+## Install
+
+    npm install react-timecalendar date-fns
+
+## Minimal usage
+
+    import TimeCalendar from "react-timecalendar";
+    <TimeCalendar openHours={[[9, 17]]} timeSlot={30} onTimeClick={(t: Date) => save(t)} />
+
+## Key props
+
+- openHours: number[][] — [open, close] in 24h decimal. 1 entry = every day, 2 = weekday/weekend, 7 = Sunday-first per day. Required for the time view.
+- timeSlot: number — slot length in minutes, default 30.
+- bookings: { id, start_time, end_time }[] — Date, epoch ms or ISO-8601 string. In day view, slots from start_time (inclusive) to end_time (exclusive) render disabled. In month view without openHours, every calendar day the booking touches renders disabled (a booking ending at 00:00 still blocks that day).
+- onDateClick(day: Date), onTimeClick(time: Date)
+- startTime / endTime: Date | epoch ms | ISO string | "" — multi-slot range to highlight; the component does not enforce it, your onTimeClick does.
+- selectedDate / onSelectedDateChange, view ("month" | "day") / onViewChange — controlled; defaultSelectedDate / defaultView for uncontrolled initial state.
+- disableHistory (default true), clickable (default true).
+
+All times are browser-local Dates. Styles are injected on import; class names are documented in README.md under "Styling".
+
+## Docs
+
+- README: https://github.com/jacobsidford/react-timecalendar/blob/master/README.md (full booking-flow example under "Complete booking flow")
+- Types: https://github.com/jacobsidford/react-timecalendar/blob/master/src/types.ts
+- Changelog: https://github.com/jacobsidford/react-timecalendar/blob/master/CHANGELOG.md
+- Live demo: https://jacobsidford.github.io/react-timecalendar/
