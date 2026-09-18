@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.0.1 — 2026-09-18
+
+### Fixed
+- ESM build is now `build/index.mjs`. With a `.js` extension in a CommonJS package, native Node ESM (SSR, vitest in node mode) treated it as CJS and named imports failed.
+
 ## 3.0.0 — 2026-09-18
 
 ### Breaking
