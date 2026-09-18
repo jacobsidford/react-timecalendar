@@ -1,9 +1,9 @@
 {
 	"name": "react-timecalendar",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Lightweight React calendar with time options for booking",
 	"main": "build/index.js",
-	"module": "build/index.es.js",
+	"module": "build/index.mjs",
 	"author": {
 		"name": "Jacob Sidford",
 		"email": "jacob.sidford@gmail.com"
@@ -80,7 +80,7 @@
 	"exports": {
 		".": {
 			"types": "./build/index.d.ts",
-			"import": "./build/index.es.js",
+			"import": "./build/index.mjs",
 			"require": "./build/index.js"
 		},
 		"./package.json": "./package.json"
